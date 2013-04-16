@@ -73,7 +73,7 @@ public class CardReader {
 			Card c = new Card(line, lineNo++);
 			listing.add(c);
 		}
-		listing.add(new EndCard(lineNo));
+		//listing.add(new EndCard(lineNo));
 		return listing;
 	}
 }

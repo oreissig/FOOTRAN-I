@@ -1,0 +1,7 @@
+C      PROGRAM FOR FINDING THE LARGEST VALUE
+C    X      ATTAINED BY A SET OF NUMBERS
+       BIGA = A(1)
+       DO 20  I = 2,N
+       IF (BIGA - A(I)) 10, 20, 20
+   10  BIGA = A(1)
+   20  CONTINUE 
