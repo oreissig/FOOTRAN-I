@@ -98,7 +98,7 @@ public class Card {
 				remain = 72;
 			else
 				remain = line.length();
-			statement = line.substring(6, remain);
+			statement = line.substring(6, remain).trim();
 		} else {
 			statement = null;
 		}
@@ -108,6 +108,13 @@ public class Card {
 		} else {
 			ident = null;
 		}
+	}
+	
+	/**
+	 * @return <tt>true</tt> if a line number is associated with this card, <tt>false</tt> otherwise
+	 */
+	public boolean hasLineNumber() {
+		return lineNo != NO_NUMBER;
 	}
 	
 	/**
@@ -154,6 +161,13 @@ public class Card {
 	}
 	
 	/**
+	 * @return <tt>true</tt> if this card has a statement, <tt>false</tt> otherwise
+	 */
+	public boolean hasStatement() {
+		return statement != null && !statement.isEmpty();
+	}
+	
+	/**
 	 * @return text section of the statement contained in this card, <tt>null</tt> if none
 	 */
 	public String getStatement() {
@@ -163,7 +177,33 @@ public class Card {
 	/**
 	 * @return indentifying information at the right end of the card, <tt>null</tt> if none
 	 */
+	public boolean hasIdentifier() {
+		return ident != null && !ident.isEmpty();
+	}
+	
+	/**
+	 * @return indentifying information at the right end of the card, <tt>null</tt> if none
+	 */
 	public String getIdentifier() {
 		return ident;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		if (hasLineNumber())
+			sb.append(getLineNumber()).append(": ");
+		if (isComment())
+			sb.append("Comment: ");
+		if (hasNumber())
+			sb.append("Number ").append(getNumber()).append(": ");
+		if (isContinuation())
+			sb.append("Continuation ").append(getContinuation()).append(": ");
+		if (hasStatement())
+			sb.append("\"").append(getStatement()).append("\"");
+		if (hasIdentifier())
+			sb.append(" (").append(getIdentifier()).append(")");
+		
+		return sb.toString();
 	}
 }
