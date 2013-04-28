@@ -165,4 +165,9 @@ public class CardImpl implements Card {
 		
 		return sb.toString();
 	}
+
+	@Override
+	public int compareTo(Card other) {
+		return this.getLineNumber() - other.getLineNumber();
+	}
 }

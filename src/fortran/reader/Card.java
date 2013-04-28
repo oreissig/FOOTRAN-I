@@ -6,7 +6,7 @@ package fortran.reader;
  * 
  * @author oreissig
  */
-public interface Card {
+public interface Card extends Comparable<Card> {
 
 	/**
 	 * @return <tt>true</tt> if a line number is associated with this card, <tt>false</tt> otherwise
