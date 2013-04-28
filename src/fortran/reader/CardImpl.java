@@ -1,12 +1,6 @@
 package fortran.reader;
 
 
-/**
- * This class represents a punched card and parses its columns
- * to query it's properties in a convenient way.
- * 
- * @author oreissig
- */
 public class CardImpl implements Card {
 	private static final int NO_NUMBER = -1;
 	private static final int NO_CONTINUATION = '0';
