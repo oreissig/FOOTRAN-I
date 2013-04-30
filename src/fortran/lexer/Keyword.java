@@ -2,9 +2,13 @@ package fortran.lexer;
 
 import static fortran.lexer.LiteralType.*;
 
+import java.util.AbstractSet;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.Set;
+
+import com.google.common.collect.UnmodifiableIterator;
 
 /**
  * This class contains the definition of the subset of {@link LiteralType}s,
@@ -50,6 +54,59 @@ public class Keyword {
 			    DIMENSTION, EQUIVALENCE, FREQUENCY
 				);
 		set = Collections.unmodifiableSet(keywords);
+	}
+	
+	/**
+	 * String representations of all {@link LiteralType}s
+	 * contained in {@link #set}.
+	 */
+	public static final Set<String> names = new AbstractSet<String>() {
+		@Override
+		public boolean contains(Object o) {
+			try {
+				LiteralType e = LiteralType.valueOf(o.toString().toUpperCase());
+				return set.contains(e);
+			} catch (IllegalArgumentException e) {
+				return false;
+			}
+		}
+		
+		@Override
+		public boolean remove(Object o) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public Iterator<String> iterator() {
+			final Iterator<LiteralType> i = set.iterator();
+			return new UnmodifiableIterator<String>() {
+				@Override
+				public boolean hasNext() {
+					return i.hasNext();
+				}
+				
+				@Override
+				public String next() {
+					return i.next().name();
+				}
+			};
+		}
+		
+		@Override
+		public int size() {
+			return set.size();
+		}
+	};
+	
+	/**
+	 * Tells whether or not a given string represents a valid
+	 * keyword in the FORTRAN language.
+	 * 
+	 * @param string to test
+	 * @return true if it is a keyword, false otherwise
+	 */
+	public static boolean isKeyword(String string) {
+		return names.contains(string);
 	}
 	
 	private Keyword() {
