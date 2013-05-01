@@ -3,6 +3,7 @@ package fortran;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 
 import fortran.reader.Card;
 import fortran.reader.CardReader;
@@ -21,9 +22,9 @@ public class ReaderMain {
 		for (String file : args) {
 			System.out.println(file);
 			InputStream in = new FileInputStream(file);
-			Iterable<Card> cards = cr.read(in);
-			for (Card c : cards)
-				System.out.println(c.toString());
+			Iterator<Card> cards = cr.read(in);
+			while (cards.hasNext())
+				System.out.println(cards.next().toString());
 			System.out.println();
 		}
 	}

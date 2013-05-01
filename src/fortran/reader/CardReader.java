@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 
+import com.google.common.collect.PeekingIterator;
+
 /**
  * The CardReader drives the initial read of a source
  * file and the basic parsing of the punched card format.
@@ -19,9 +21,8 @@ public interface CardReader {
 	 * 
 	 * @param source source code
 	 * @return cards
-	 * @throws IOException
 	 */
-	public abstract Iterable<Card> read(String source) throws IOException;
+	public abstract PeekingIterator<Card> read(String source);
 
 	/**
 	 * Reads from the given InputStream to create an according
@@ -31,7 +32,7 @@ public interface CardReader {
 	 * @return cards
 	 * @throws IOException
 	 */
-	public abstract Iterable<Card> read(InputStream input)
+	public abstract PeekingIterator<Card> read(InputStream input)
 			throws IOException;
 
 	/**
@@ -42,7 +43,7 @@ public interface CardReader {
 	 * @return cards
 	 * @throws IOException
 	 */
-	public abstract Iterable<Card> read(Reader reader) throws IOException;
+	public abstract PeekingIterator<Card> read(Reader reader) throws IOException;
 
 	/**
 	 * Reads from the given Reader to create an according
@@ -52,7 +53,7 @@ public interface CardReader {
 	 * @return cards
 	 * @throws IOException
 	 */
-	public abstract Iterable<Card> read(BufferedReader reader)
+	public abstract PeekingIterator<Card> read(BufferedReader reader)
 			throws IOException;
 
 }

@@ -10,26 +10,26 @@ import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
 import com.google.common.collect.AbstractIterator;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.PeekingIterator;
 
 public class CardReaderImpl implements CardReader {
 
 	@Override
-	public Iterable<Card> read(final String source) throws IOException {
-		return new Iterable<Card>() {
-			@Override
-			public Iterator<Card> iterator() {
-				Reader r = new StringReader(source);
-				try {
-					return read(r).iterator();
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-			}
-		};
+	public PeekingIterator<Card> read(final String source) {
+		Reader r = new StringReader(source);
+		try {
+			return read(r);
+		} catch (IOException e) {
+			// this will not happen, StringReader doesn't throw IOException
+			// return empty iterator nevertheless
+			Iterator<Card> empty = Iterators.emptyIterator();
+			return Iterators.peekingIterator(empty);
+		}
 	}
 	
 	@Override
-	public Iterable<Card> read(InputStream input) throws IOException {
+	public PeekingIterator<Card> read(InputStream input) throws IOException {
 		try {
 			return read(new InputStreamReader(input, "US-ASCII"));
 		} catch (UnsupportedEncodingException e) {
@@ -38,31 +38,31 @@ public class CardReaderImpl implements CardReader {
 	}
 	
 	@Override
-	public Iterable<Card> read(Reader reader) throws IOException {
+	public PeekingIterator<Card> read(Reader reader) throws IOException {
 		return read(new BufferedReader(reader));
 	}
 
 	@Override
-	public Iterable<Card> read(final BufferedReader reader) throws IOException {
-		final Iterator<Card> i = new AbstractIterator<Card>() {
-			private int lineNo = 1;
-			
-			@Override
-			protected Card computeNext() {
-				try {
-					String line = reader.readLine();
-					return new CardImpl(line, lineNo++);
-				} catch (IOException e) {
-					return endOfData();
-				}
-			}
-		};
+	public PeekingIterator<Card> read(final BufferedReader reader) throws IOException {
+		return new CardIterator(reader);
+	}
+	
+	protected class CardIterator extends AbstractIterator<Card> implements PeekingIterator<Card> {
+		private final BufferedReader reader;
+		private int lineNo = 1;
 		
-		return new Iterable<Card>() {
-			@Override
-			public Iterator<Card> iterator() {
-				return i;
+		public CardIterator(BufferedReader reader) {
+			this.reader = reader;
+		}
+		
+		@Override
+		protected Card computeNext() {
+			try {
+				String line = reader.readLine();
+				return new CardImpl(line, lineNo++);
+			} catch (IOException e) {
+				return endOfData();
 			}
-		};
+		}
 	}
 }
