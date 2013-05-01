@@ -32,6 +32,7 @@ import com.google.common.collect.Iterators;
  * @author oreissig
  */
 public class Keyword {
+	
 	/**
 	 * All {@link LiteralType}s, that directly represent a
 	 * keyword of the FORTRAN language.
@@ -39,6 +40,7 @@ public class Keyword {
 	public static final Set<LiteralType> set;
 	
 	static {
+		// initialize set
 		EnumSet<LiteralType> keywords = EnumSet.of(
 			    // Control Statements
 			    GO, TO, ASSIGN, IF,
@@ -72,6 +74,9 @@ public class Keyword {
 			}
 		}
 		
+		/**
+		 * short cut to fail fast without iteration
+		 */
 		@Override
 		public boolean remove(Object o) {
 			throw new UnsupportedOperationException();
