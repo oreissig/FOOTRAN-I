@@ -8,7 +8,8 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.google.common.collect.UnmodifiableIterator;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
 
 /**
  * This class contains the definition of the subset of {@link LiteralType}s,
@@ -78,18 +79,12 @@ public class Keyword {
 		
 		@Override
 		public Iterator<String> iterator() {
-			final Iterator<LiteralType> i = set.iterator();
-			return new UnmodifiableIterator<String>() {
+			return Iterators.transform(set.iterator(), new Function<LiteralType, String>() {
 				@Override
-				public boolean hasNext() {
-					return i.hasNext();
+				public String apply(LiteralType input) {
+					return input.name();
 				}
-				
-				@Override
-				public String next() {
-					return i.next().name();
-				}
-			};
+			});
 		}
 		
 		@Override
