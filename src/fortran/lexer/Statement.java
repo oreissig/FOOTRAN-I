@@ -3,8 +3,6 @@ package fortran.lexer;
 import java.util.List;
 import java.util.SortedSet;
 
-import com.google.common.collect.PeekingIterator;
-
 import fortran.reader.Card;
 
 /**

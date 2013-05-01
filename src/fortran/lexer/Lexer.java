@@ -1,6 +1,6 @@
 package fortran.lexer;
 
-import com.google.common.collect.PeekingIterator;
+import java.util.Iterator;
 
 import fortran.reader.Card;
 
@@ -10,5 +10,5 @@ import fortran.reader.Card;
  * 
  * @author oreissig
  */
-public interface Lexer extends PeekingIterator<Literal> {
+public interface Lexer extends Iterator<Statement> {
 }

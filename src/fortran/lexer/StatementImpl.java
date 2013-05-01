@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 import fortran.reader.Card;
 
-public class StatementImpl implements Statement {
+class StatementImpl implements Statement {
 
 	private final SortedSet<Card> cards = new TreeSet<>();
 	private final List<Literal> literals = new ArrayList<>();

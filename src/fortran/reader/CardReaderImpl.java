@@ -13,7 +13,7 @@ import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
 
-public class CardReaderImpl implements CardReader {
+class CardReaderImpl implements CardReader {
 
 	@Override
 	public PeekingIterator<Card> read(final String source) {

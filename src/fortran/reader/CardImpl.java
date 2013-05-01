@@ -1,7 +1,7 @@
 package fortran.reader;
 
 
-public class CardImpl implements Card {
+class CardImpl implements Card {
 	private static final int NO_NUMBER = -1;
 	private static final int NO_CONTINUATION = '0';
 
