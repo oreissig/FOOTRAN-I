@@ -22,11 +22,10 @@ class CardReaderImpl extends AbstractIterator<Card> implements CardReader {
 	}
 
 	public CardReaderImpl(Reader reader) {
-		this(new BufferedReader(reader));
-	}
-
-	public CardReaderImpl(BufferedReader reader) {
-		this.reader = reader;
+		if (reader instanceof BufferedReader)
+			this.reader = (BufferedReader) reader;
+		else
+			this.reader = new BufferedReader(reader);
 	}
 
 	@Override
