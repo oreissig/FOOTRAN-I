@@ -61,4 +61,13 @@ class LexerImpl extends AbstractIterator<Statement> implements Lexer {
 		} while (card.isComment());
 		return true;
 	}
+
+	private boolean expect(String toBeExpected) {
+		String stmt = card.getStatement();
+		// enough chars left?
+		if ((stmt.length()-position) < toBeExpected.length())
+			return false;
+		else
+			return stmt.substring(position).startsWith(toBeExpected);
+	}
 }
