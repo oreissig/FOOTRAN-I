@@ -5,8 +5,9 @@ A modern implementation of a compiler for the very first version of FORTRAN base
 
 Requirements:
 -------------
-- [Google Guice](https://code.google.com/p/google-guice/)
-- [Google Guava](https://code.google.com/p/guava-libraries/)
+- [Google Guice](https://code.google.com/p/google-guice/) 3.0
+- [Google Guava](https://code.google.com/p/guava-libraries/) 14.0
+Those are referenced by the Eclipse projects as user libraries (Preferences -> Java -> Build Path -> User Libraries).
 
 To Do:
 ------
@@ -14,4 +15,4 @@ To Do:
 - `[ ]` lexer
 - `[ ]` parser
 - `[ ]` code generation
-- `[ ]` optimization
+- `[ ]` optimizations
