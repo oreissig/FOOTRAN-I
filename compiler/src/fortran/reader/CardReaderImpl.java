@@ -37,7 +37,7 @@ class CardReaderImpl extends AbstractIterator<Card> implements CardReader {
 			else
 				return endOfData();
 		} catch (IOException e) {
-			return endOfData();
+			throw new CardException("could not read next card", e);
 		}
 	}
 }
