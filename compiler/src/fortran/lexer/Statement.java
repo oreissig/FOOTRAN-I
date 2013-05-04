@@ -35,15 +35,8 @@ public interface Statement {
 	 * 
 	 * @return cards that make up this Statement
 	 */
+	// TODO actually needed? (if removed also fix class javadoc)
 	public SortedSet<Card> getCards();
-
-	/**
-	 * Adds a {@link Card}, that makes up this Statement.
-	 * 
-	 * @param nextCard
-	 *            to be added
-	 */
-	public void addCard(Card nextCard);
 
 	/**
 	 * Gets all {@link Card}s that make up this Statement.
@@ -51,12 +44,4 @@ public interface Statement {
 	 * @return cards that make up this Statement
 	 */
 	public List<Literal> getLiterals();
-
-	/**
-	 * Adds a {@link Card}, that makes up this Statement.
-	 * 
-	 * @param nextCard
-	 *            to be added
-	 */
-	public void addLiteral(Literal nextLiteral);
 }

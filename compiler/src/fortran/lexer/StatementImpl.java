@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 import fortran.reader.Card;
 
-class StatementImpl implements Statement {
+class StatementImpl implements Statement, StatementBuilder {
 
 	private final SortedSet<Card> cards = new TreeSet<>();
 	private final List<Literal> literals = new ArrayList<>();
@@ -62,5 +62,10 @@ class StatementImpl implements Statement {
 	@Override
 	public void addLiteral(Literal nextLiteral) {
 		literals.add(nextLiteral);
+	}
+
+	@Override
+	public Statement build() {
+		return this;
 	}
 }
