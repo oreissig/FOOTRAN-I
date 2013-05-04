@@ -31,7 +31,7 @@ import com.google.common.collect.Iterators;
  * </ul> 
  * @author oreissig
  */
-public class Keyword {
+public class Keywords {
 	
 	/**
 	 * All {@link LiteralType}s, that directly represent a
@@ -109,7 +109,7 @@ public class Keyword {
 		return names.contains(string);
 	}
 	
-	private Keyword() {
+	private Keywords() {
 		// forbid instantiation
 	}
 }
