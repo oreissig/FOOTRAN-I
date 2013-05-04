@@ -74,7 +74,7 @@ class CardImpl implements Card {
 				remain = 72;
 			else
 				remain = line.length();
-			statement = line.substring(6, remain);//.trim();
+			statement = line.substring(STATEMENT_OFFSET, remain);
 		} else {
 			statement = null;
 		}
@@ -129,11 +129,6 @@ class CardImpl implements Card {
 	@Override
 	public String getStatement() {
 		return statement;
-	}
-	
-	@Override
-	public int getStatementOffset() {
-		return continuation;
 	}
 	
 	@Override
