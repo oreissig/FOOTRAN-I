@@ -93,4 +93,25 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 		} while (next.isComment());
 		return next;
 	}
+
+	/**
+	 * Peeks at the next non-comment card without progressing the Iterator to
+	 * it.
+	 * 
+	 * @return peeked Card, null if no more cards
+	 */
+	private Card peekCard() {
+		Card peek;
+		while (true) {
+			if (!cards.hasNext())
+				// EOF
+				return null;
+			peek = cards.peek();
+			if (!peek.isComment())
+				// success
+				return peek;
+			// skip card
+			cards.next();
+		}
+	}
 }
