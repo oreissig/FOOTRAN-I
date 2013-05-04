@@ -1,6 +1,7 @@
 package fortran.lexer;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,13 +12,18 @@ import com.google.common.collect.PeekingIterator;
 
 import fortran.reader.Card;
 
-class LexerImpl extends AbstractIterator<Statement> implements Lexer {
+/**
+ * This abstract class takes care of all the FORTRAN specific punched card
+ * handling (usually not needed in free-form languages), so that the actual
+ * lexer only needs to work on the plain statement code.
+ * 
+ * @author oreissig
+ */
+abstract class StatementHandler extends AbstractIterator<Statement> implements Lexer {
 
-	private static final Logger log = LoggerFactory.getLogger(Lexer.class);
+	static final Logger log = LoggerFactory.getLogger(Lexer.class);
 
 	private final PeekingIterator<Card> cards;
-	private Card card = null;
-	private int position = -1;
 
 	/**
 	 * Creates a new Lexer based on the given stream of {@link Card}s.
@@ -25,7 +31,7 @@ class LexerImpl extends AbstractIterator<Statement> implements Lexer {
 	 * @param cards
 	 *            to lex
 	 */
-	public LexerImpl(Iterator<Card> cards) {
+	public StatementHandler(Iterator<Card> cards) {
 		if (cards instanceof PeekingIterator)
 			this.cards = (PeekingIterator<Card>) cards;
 		else
@@ -38,46 +44,53 @@ class LexerImpl extends AbstractIterator<Statement> implements Lexer {
 	 * @param cards
 	 *            to lex
 	 */
-	public LexerImpl(Iterable<Card> cards) {
+	public StatementHandler(Iterable<Card> cards) {
 		this(cards.iterator());
 	}
 
 	@Override
 	protected Statement computeNext() {
-		final Statement stmt = new StatementImpl();
+		Card current = null;
+		final StatementBuilder stmt = new StatementImpl();
 
-		if (card == null) {
-			if (!nextCard())
-				endOfData();
+		// read first card
+		current = nextCard();
+		if (current == null)
+			return endOfData();
+		// TODO check no continuation usw
+
+		// check for continuations
+		while (cards.peek().isContinuation()) {
+			// TODO
+			lex(current, stmt);
 		}
 
-		// TODO
 		return endOfData();
 	}
+
+	private void lex(Card current, StatementBuilder stmt) {
+		stmt.addCard(current);
+		List<Literal> literals = lex(current);
+		for (Literal l : literals)
+			stmt.addLiteral(l);
+	}
+
+	protected abstract List<Literal> lex(Card card);
 
 	/**
 	 * Reads the next non-comment card.
 	 * 
-	 * @return true on success, false if no more cards
+	 * @return next card on success, null if no more cards
 	 */
-	private boolean nextCard() {
-		position = 0;
+	private Card nextCard() {
+		Card next;
 		do {
 			if (cards.hasNext()) {
-				card = cards.next();
+				next = cards.next();
 			} else {
-				return false;
+				return null;
 			}
-		} while (card.isComment());
-		return true;
-	}
-
-	private boolean expect(String toBeExpected) {
-		String stmt = card.getStatement();
-		// enough chars left?
-		if ((stmt.length() - position) < toBeExpected.length())
-			return false;
-		else
-			return stmt.substring(position).startsWith(toBeExpected);
+		} while (next.isComment());
+		return next;
 	}
 }
