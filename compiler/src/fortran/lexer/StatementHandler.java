@@ -56,25 +56,46 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 		// read first card
 		current = nextCard();
 		if (current == null)
+			// EOF
 			return endOfData();
-		// TODO check no continuation usw
+		if (current.isContinuation())
+			log.error("statement at line {} starts with continuation {}",
+					current.getLineNumber(), current.getContinuation());
+		lex(current, stmt);
 
 		// check for continuations
-		while (cards.peek().isContinuation()) {
-			// TODO
+		char lastContinuation = '0';
+		while (peekCard().isContinuation()) {
+			current = nextCard();
+			// check sanity of continuation mark
+			if (!Character.isDigit(current.getContinuation()))
+				log.warn("continuations are only specified for values 0-9, got {} instead at line {}",
+						 current.getContinuation(), current.getLineNumber());
+			else if (current.getContinuation() != lastContinuation+1)
+				log.warn("Expected continuation {}, got {} at line {}",
+						 (char)(lastContinuation+1), current.getContinuation(),
+						 current.getLineNumber());
+			lastContinuation = current.getContinuation();
+			
 			lex(current, stmt);
 		}
 
-		return endOfData();
+		return stmt.build();
 	}
 
 	private void lex(Card current, StatementBuilder stmt) {
 		stmt.addCard(current);
-		List<Literal> literals = lex(current);
-		for (Literal l : literals)
+		for (Literal l : lex(current))
 			stmt.addLiteral(l);
 	}
 
+	/**
+	 * Does the lexing for a given card.
+	 * 
+	 * @param card 
+	 *            with statement to lex
+	 * @return list of literals
+	 */
 	protected abstract List<Literal> lex(Card card);
 
 	/**
