@@ -102,12 +102,12 @@ class CardImpl implements Card {
 	}
 	
 	@Override
-	public boolean hasNumber() {
+	public boolean hasStatementNumber() {
 		return number != NO_NUMBER;
 	}
 	
 	@Override
-	public int getNumber() {
+	public int getStatementNumber() {
 		return number;
 	}
 	
@@ -153,8 +153,8 @@ class CardImpl implements Card {
 			sb.append(getLineNumber()).append(": ");
 		if (isComment())
 			sb.append("Comment: ");
-		if (hasNumber())
-			sb.append("Number ").append(getNumber()).append(": ");
+		if (hasStatementNumber())
+			sb.append("Number ").append(getStatementNumber()).append(": ");
 		if (isContinuation()) {
 			sb.append("Continuation ").append(getContinuation()).append(": ");
 		}

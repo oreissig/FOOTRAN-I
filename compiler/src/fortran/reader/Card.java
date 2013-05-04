@@ -26,13 +26,13 @@ public interface Card extends Comparable<Card> {
 	/**
 	 * @return <tt>true</tt> if there is a statement number associated with this card, <tt>false</tt> otherwise
 	 */
-	public abstract boolean hasNumber();
+	public abstract boolean hasStatementNumber();
 
 	/**
 	 * @return statement number associated with this card, undefined if there is no number
-	 * @see #hasNumber()
+	 * @see #hasStatementNumber()
 	 */
-	public abstract int getNumber();
+	public abstract int getStatementNumber();
 
 	/**
 	 * @return <tt>true</tt> if this card is a continuation of the previous card, <tt>false</tt> otherwise

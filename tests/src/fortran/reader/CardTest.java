@@ -96,24 +96,24 @@ public class CardTest {
 	public void testNumbers() {
 		String line1 = "C";
 		Card s1 = new CardImpl(line1);
-		assertFalse(s1.hasNumber());
+		assertFalse(s1.hasStatementNumber());
 		
 		// lower limit
 		String line2 = "    0";
 		Card s2 = new CardImpl(line2);
-		assertTrue(s2.hasNumber());
-		assertEquals(0, s2.getNumber());
+		assertTrue(s2.hasStatementNumber());
+		assertEquals(0, s2.getStatementNumber());
 		
 		String line3 = "C1234a";
 		Card s3 = new CardImpl(line3);
-		assertTrue(s3.hasNumber());
-		assertEquals(1234, s3.getNumber());
+		assertTrue(s3.hasStatementNumber());
+		assertEquals(1234, s3.getStatementNumber());
 		
 		// upper limit
 		String line4 = "32767";
 		Card s4 = new CardImpl(line4);
-		assertTrue(s4.hasNumber());
-		assertEquals(32767, s4.getNumber());
+		assertTrue(s4.hasStatementNumber());
+		assertEquals(32767, s4.getStatementNumber());
 		
 		String line5 = " abcd ";
 		try {

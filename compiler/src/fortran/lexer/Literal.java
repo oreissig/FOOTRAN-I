@@ -18,11 +18,11 @@ public interface Literal {
 	public abstract LiteralType getType();
 
 	/**
-	 * Gets the Card, this literal has been defined on.
+	 * Gets the line (or card) number, this literal has been defined on.
 	 * 
-	 * @return defining Card
+	 * @return line number
 	 */
-	public abstract Card getCard();
+	public abstract int getLineNumber();
 
 	/**
 	 * Gets the offset from the beginning of the statement section, where this

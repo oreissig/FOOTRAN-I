@@ -1,16 +1,14 @@
 package fortran.lexer;
 
-import fortran.reader.Card;
-
 class LiteralImpl implements Literal {
 	private final LiteralType type;
-	private final Card card;
+	private final int lineNumber;
 	private final int offset;
 	private final String text;
 
-	public LiteralImpl(LiteralType type, Card card, int offset, String text) {
+	public LiteralImpl(LiteralType type, int lineNumber, int offset, String text) {
 		this.type = type;
-		this.card = card;
+		this.lineNumber = lineNumber;
 		this.offset = offset;
 		this.text = text;
 	}
@@ -21,8 +19,8 @@ class LiteralImpl implements Literal {
 	}
 
 	@Override
-	public Card getCard() {
-		return card;
+	public int getLineNumber() {
+		return lineNumber;
 	}
 
 	@Override
