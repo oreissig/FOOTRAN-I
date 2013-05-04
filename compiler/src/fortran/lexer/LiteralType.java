@@ -17,5 +17,7 @@ public enum LiteralType {
     TAPE, DRUM,
     END, FILE, REWIND, BACKSPACE,
     // Specification Statements
-    DIMENSTION, EQUIVALENCE, FREQUENCY
+    DIMENSTION, EQUIVALENCE, FREQUENCY,
+    // Identifiers
+    IDENT
 }
