@@ -2,6 +2,9 @@ package fortran.lexer;
 
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.PeekingIterator;
@@ -9,6 +12,8 @@ import com.google.common.collect.PeekingIterator;
 import fortran.reader.Card;
 
 class LexerImpl extends AbstractIterator<Statement> implements Lexer {
+
+	private static final Logger log = LoggerFactory.getLogger(Lexer.class);
 
 	private final PeekingIterator<Card> cards;
 	private Card card = null;
@@ -40,12 +45,12 @@ class LexerImpl extends AbstractIterator<Statement> implements Lexer {
 	@Override
 	protected Statement computeNext() {
 		final Statement stmt = new StatementImpl();
-		
+
 		if (card == null) {
 			if (!nextCard())
 				endOfData();
 		}
-		
+
 		// TODO
 		return endOfData();
 	}
@@ -70,7 +75,7 @@ class LexerImpl extends AbstractIterator<Statement> implements Lexer {
 	private boolean expect(String toBeExpected) {
 		String stmt = card.getStatement();
 		// enough chars left?
-		if ((stmt.length()-position) < toBeExpected.length())
+		if ((stmt.length() - position) < toBeExpected.length())
 			return false;
 		else
 			return stmt.substring(position).startsWith(toBeExpected);
