@@ -14,16 +14,6 @@ class StatementImpl implements Statement, StatementBuilder {
 	private final List<Literal> literals = new ArrayList<>();
 	private Integer number = null;
 
-	/**
-	 * Construct a new Statement.
-	 * 
-	 * @param firstCard
-	 *            at least one Card is needed for a Statement
-	 */
-	public StatementImpl(Card firstCard) {
-		addCard(firstCard);
-	}
-
 	@Override
 	public boolean hasStatementNumber() {
 		return number != null;
@@ -41,8 +31,8 @@ class StatementImpl implements Statement, StatementBuilder {
 
 	@Override
 	public void addCard(Card nextCard) {
-		cards.add(nextCard);
-		if (nextCard.hasStatementNumber()) {
+		boolean newly = cards.add(nextCard);
+		if (newly && nextCard.hasStatementNumber()) {
 			int newNumber = nextCard.getStatementNumber();
 			if (number == null)
 				number = newNumber;
@@ -66,6 +56,9 @@ class StatementImpl implements Statement, StatementBuilder {
 
 	@Override
 	public Statement build() {
-		return this;
+		if (cards.isEmpty())
+			throw new IllegalStateException("A statement must at least contain one Card");
+		else
+			return this;
 	}
 }
