@@ -5,7 +5,6 @@ A modern implementation of a compiler for the very first version of FORTRAN base
 
 Requirements:
 -------------
-- [Google Guice](https://code.google.com/p/google-guice/) 3.0
 - [Google Guava](https://code.google.com/p/guava-libraries/) 14.0
 - [SLF4J](http://www.slf4j.org/) 1.7.5
 
