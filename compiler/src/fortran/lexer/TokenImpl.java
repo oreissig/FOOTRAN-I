@@ -1,12 +1,12 @@
 package fortran.lexer;
 
-class LiteralImpl implements Literal {
-	private final LiteralType type;
+class TokenImpl implements Token {
+	private final TokenType type;
 	private final int lineNumber;
 	private final int offset;
 	private final String text;
 
-	public LiteralImpl(LiteralType type, int lineNumber, int offset, String text) {
+	public TokenImpl(TokenType type, int lineNumber, int offset, String text) {
 		this.type = type;
 		this.lineNumber = lineNumber;
 		this.offset = offset;
@@ -14,7 +14,7 @@ class LiteralImpl implements Literal {
 	}
 
 	@Override
-	public LiteralType getType() {
+	public TokenType getType() {
 		return type;
 	}
 

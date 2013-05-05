@@ -18,12 +18,12 @@ interface StatementBuilder {
 	public void addCard(Card nextCard);
 
 	/**
-	 * Adds a {@link Card}, that makes up this Statement.
+	 * Adds a {@link Token} to this Statement.
 	 * 
-	 * @param nextCard
+	 * @param nextToken
 	 *            to be added
 	 */
-	public void addLiteral(Literal nextLiteral);
+	public void addToken(Token nextToken);
 	
 	/**
 	 * Finishes construction of this Statement.

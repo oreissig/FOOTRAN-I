@@ -1,6 +1,6 @@
 package fortran.lexer;
 
-import static fortran.lexer.LiteralType.*;
+import static fortran.lexer.TokenType.*;
 
 import java.util.AbstractSet;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 
 /**
- * This class contains the definition of the subset of {@link LiteralType}s,
+ * This class contains the definition of the subset of {@link TokenType}s,
  * that directly represent a keyword of the FORTRAN language:
  * <ul>
  *  <li>Control Statements:
@@ -34,14 +34,14 @@ import com.google.common.collect.Iterators;
 public class Keywords {
 	
 	/**
-	 * All {@link LiteralType}s, that directly represent a
+	 * All {@link TokenType}s, that directly represent a
 	 * keyword of the FORTRAN language.
 	 */
-	public static final Set<LiteralType> set;
+	public static final Set<TokenType> set;
 	
 	static {
 		// initialize set
-		EnumSet<LiteralType> keywords = EnumSet.of(
+		EnumSet<TokenType> keywords = EnumSet.of(
 			    // Control Statements
 			    GO, TO, ASSIGN, IF,
 			    SENSE, LIGHT, SWITCH,
@@ -60,14 +60,14 @@ public class Keywords {
 	}
 	
 	/**
-	 * String representations of all {@link LiteralType}s
+	 * String representations of all {@link TokenType}s
 	 * contained in {@link #set}.
 	 */
 	public static final Set<String> names = new AbstractSet<String>() {
 		@Override
 		public boolean contains(Object o) {
 			try {
-				LiteralType e = LiteralType.valueOf(o.toString().toUpperCase());
+				TokenType e = TokenType.valueOf(o.toString().toUpperCase());
 				return set.contains(e);
 			} catch (IllegalArgumentException e) {
 				return false;
@@ -84,9 +84,9 @@ public class Keywords {
 		
 		@Override
 		public Iterator<String> iterator() {
-			return Iterators.transform(set.iterator(), new Function<LiteralType, String>() {
+			return Iterators.transform(set.iterator(), new Function<TokenType, String>() {
 				@Override
-				public String apply(LiteralType input) {
+				public String apply(TokenType input) {
 					return input.name();
 				}
 			});

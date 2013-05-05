@@ -1,6 +1,6 @@
 package fortran.lexer;
 
-public enum LiteralType {
+public enum TokenType {
 	// Expressions
     BRACE1, BRACE2,
     EQUALS, COMMA,
@@ -18,6 +18,6 @@ public enum LiteralType {
     END, FILE, REWIND, BACKSPACE,
     // Specification Statements
     DIMENSTION, EQUIVALENCE, FREQUENCY,
-    // Identifiers
-    IDENT
+    // Literals
+    IDENT, CONST_INT, CONST_FLOAT
 }

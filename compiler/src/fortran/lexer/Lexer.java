@@ -5,7 +5,7 @@ import java.util.Iterator;
 import fortran.reader.Card;
 
 /**
- * The Lexer creates a stream of {@link Literal}s
+ * The Lexer creates a stream of {@link Token}s
  * from a stream of {@link Card}s.
  * 
  * @author oreissig

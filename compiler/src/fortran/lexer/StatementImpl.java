@@ -11,7 +11,7 @@ import fortran.reader.Card;
 class StatementImpl implements Statement, StatementBuilder {
 
 	private final SortedSet<Card> cards = new TreeSet<>();
-	private final List<Literal> literals = new ArrayList<>();
+	private final List<Token> tokens = new ArrayList<>();
 	private Integer number = null;
 
 	@Override
@@ -45,13 +45,13 @@ class StatementImpl implements Statement, StatementBuilder {
 	}
 
 	@Override
-	public List<Literal> getLiterals() {
-		return Collections.unmodifiableList(literals);
+	public List<Token> getTokens() {
+		return Collections.unmodifiableList(tokens);
 	}
 
 	@Override
-	public void addLiteral(Literal nextLiteral) {
-		literals.add(nextLiteral);
+	public void addToken(Token nextToken) {
+		tokens.add(nextToken);
 	}
 
 	@Override

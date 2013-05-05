@@ -8,8 +8,9 @@ import fortran.reader.Card;
 
 class LexerImpl extends StatementHandler {
 
-	private Card current;
-	private int position;
+	private String stmt;
+	private int lineNo;
+	private int offset;
 	private Character c;
 
 	public LexerImpl(Iterable<Card> cards) {
@@ -21,23 +22,24 @@ class LexerImpl extends StatementHandler {
 	}
 
 	@Override
-	protected List<Literal> lex(Card card) {
-		List<Literal> literals = new ArrayList<>();
-		position = -1;
+	protected List<Token> lex(Card card) {
+		List<Token> tokens = new ArrayList<>();
+		offset = -1;
 		c = null;
-		current = card;
+		stmt = card.getStatement();
+		lineNo = card.getLineNumber();
 		nextChar();
 
-		Literal l = start();
+		Token l = start();
 		while (l != null) {
-			literals.add(l);
+			tokens.add(l);
 			l = start();
 		}
 
-		return literals;
+		return tokens;
 	}
 
-	private Literal start() {
+	private Token start() {
 		while (c != null && Character.isWhitespace(c))
 			next();
 
@@ -46,24 +48,23 @@ class LexerImpl extends StatementHandler {
 	}
 
 	private char nextChar() {
-		return c = current.getStatement().charAt(++position);
+		return c = stmt.charAt(++offset);
 	}
 
 	private char peekChar() {
-		return current.getStatement().charAt(position+1);
+		return stmt.charAt(offset+1);
 	}
 
 	private boolean expect(String toBeExpected) {
-		String stmt = current.getStatement();
 		// enough chars left?
-		if ((stmt.length() - position) < toBeExpected.length())
+		if ((stmt.length() - offset) < toBeExpected.length())
 			return false;
 		else
-			return stmt.substring(position).startsWith(toBeExpected);
+			return stmt.substring(offset).startsWith(toBeExpected);
 	}
 
-	private Literal createLiteral(LiteralType type, String text) {
-		return new LiteralImpl(type, current.getLineNumber(),
-				Card.STATEMENT_OFFSET + position, text);
+	private Token createToken(TokenType type, String text) {
+		return new TokenImpl(type, lineNo,
+				Card.STATEMENT_OFFSET + offset, text);
 	}
 }

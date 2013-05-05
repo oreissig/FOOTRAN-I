@@ -85,8 +85,8 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 
 	private void lex(Card current, StatementBuilder stmt) {
 		stmt.addCard(current);
-		for (Literal l : lex(current))
-			stmt.addLiteral(l);
+		for (Token l : lex(current))
+			stmt.addToken(l);
 	}
 
 	/**
@@ -94,9 +94,9 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 	 * 
 	 * @param card 
 	 *            with statement to lex
-	 * @return list of literals
+	 * @return list of tokens
 	 */
-	protected abstract List<Literal> lex(Card card);
+	protected abstract List<Token> lex(Card card);
 
 	/**
 	 * Reads the next non-comment card.

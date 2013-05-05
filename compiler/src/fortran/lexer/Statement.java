@@ -7,7 +7,7 @@ import fortran.reader.Card;
 
 /**
  * A statement is defined by one or more {@link Card}s and contains a series of
- * {@link Literal}s.
+ * {@link Token}s.
  * 
  * @author oreissig
  */
@@ -39,9 +39,9 @@ public interface Statement {
 	public SortedSet<Card> getCards();
 
 	/**
-	 * Gets all {@link Card}s that make up this Statement.
+	 * Gets all {@link Token}s of this Statement.
 	 * 
-	 * @return cards that make up this Statement
+	 * @return tokens of this Statement
 	 */
-	public List<Literal> getLiterals();
+	public List<Token> getTokens();
 }
