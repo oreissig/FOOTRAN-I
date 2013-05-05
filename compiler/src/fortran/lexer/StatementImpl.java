@@ -30,7 +30,7 @@ class StatementImpl implements Statement, StatementBuilder {
 	}
 
 	@Override
-	public void addCard(Card nextCard) {
+	public StatementBuilder addCard(Card nextCard) {
 		boolean newly = cards.add(nextCard);
 		if (newly && nextCard.hasStatementNumber()) {
 			int newNumber = nextCard.getStatementNumber();
@@ -42,6 +42,7 @@ class StatementImpl implements Statement, StatementBuilder {
 						" defines a statement number, but " + number +
 						" is already one defined by a previous card of this statement");
 		}
+		return this;
 	}
 
 	@Override
@@ -50,8 +51,9 @@ class StatementImpl implements Statement, StatementBuilder {
 	}
 
 	@Override
-	public void addToken(Token nextToken) {
+	public StatementBuilder addToken(Token nextToken) {
 		tokens.add(nextToken);
+		return this;
 	}
 
 	@Override

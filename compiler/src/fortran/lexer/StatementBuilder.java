@@ -15,7 +15,7 @@ interface StatementBuilder {
 	 * @param nextCard
 	 *            to be added
 	 */
-	public void addCard(Card nextCard);
+	public StatementBuilder addCard(Card nextCard);
 
 	/**
 	 * Adds a {@link Token} to this Statement.
@@ -23,7 +23,7 @@ interface StatementBuilder {
 	 * @param nextToken
 	 *            to be added
 	 */
-	public void addToken(Token nextToken);
+	public StatementBuilder addToken(Token nextToken);
 	
 	/**
 	 * Finishes construction of this Statement.
