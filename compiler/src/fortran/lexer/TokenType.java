@@ -94,11 +94,13 @@ public enum TokenType {
     
     // Literals
     /** Fixed Point Variable identifier */
-    IDENT_INT,
+    VAR_INT,
     /** Floating Point Variable identifier */
-    IDENT_FLOAT,
-    /** Function identifier */
-    IDENT_FUNC,
+    VAR_FLOAT,
+    /** Fixed Point Function identifier */
+    FUNC_INT,
+    /** Floating Point Function identifier */
+    FUNC_FLOAT,
     /** Fixed Point Constant */
     CONST_INT,
     /** Floating Point Constant */
