@@ -29,6 +29,7 @@ class CardImpl implements Card {
 	 * @param lineNo number of line (card)
 	 */
 	public CardImpl(String line, int lineNo) {
+		// TODO better error messages including lineNo and offset
 		if (line.length() > 80)
 			throw new CardException("line too long");
 		if (line.contains("\n"))
