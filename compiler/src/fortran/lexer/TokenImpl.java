@@ -32,4 +32,24 @@ class TokenImpl implements Token {
 	public String getText() {
 		return text;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Token))
+			return false;
+		
+		Token o = (Token) obj;
+		return getType().equals(o.getType()) &&
+			   getLineNumber() == o.getLineNumber() &&
+			   getOffset() == o.getOffset() &&
+			   getText().equals(o.getText());
+	}
+
+	@Override
+	public int compareTo(Token o) {
+		if (getLineNumber() == o.getLineNumber())
+			return o.getLineNumber() - getLineNumber();
+		else
+			return o.getOffset() - o.getOffset();
+	}
 }

@@ -8,7 +8,7 @@ import fortran.reader.Card;
  * 
  * @author oreissig
  */
-public interface Token {
+public interface Token extends Comparable<Token> {
 
 	/**
 	 * Gets the exact type of this token.
