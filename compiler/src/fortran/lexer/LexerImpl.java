@@ -178,13 +178,15 @@ class LexerImpl extends StatementHandler {
 	}
 
 	private char nextChar() {
-		if (offset < stmt.length()) {
+		if (offset+1 < stmt.length()) {
 			// load next char and increment offset to its position
 			c = stmt.charAt(offset + 1);
 			offset++;
 			return c;
-		} else
+		} else {
+			offset = stmt.length();
 			return c = 0;
+		}
 	}
 
 	private char peekChar() {
