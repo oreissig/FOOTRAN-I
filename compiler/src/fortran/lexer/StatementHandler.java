@@ -65,7 +65,7 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 
 		// check for continuations
 		char lastContinuation = '0';
-		while (peekCard().isContinuation()) {
+		while (peekCard() != null && peekCard().isContinuation()) {
 			current = nextCard();
 			// check sanity of continuation mark
 			if (!Character.isDigit(current.getContinuation()))
