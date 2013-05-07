@@ -113,6 +113,9 @@ class LexerImpl extends StatementHandler {
 
 	private Token constant() {
 		int start = offset;
+		// leading sign?
+		if (c == '+' || c == '-')
+			nextChar();
 		while (Character.isDigit(peekChar()))
 			nextChar();
 		/**
@@ -147,10 +150,18 @@ class LexerImpl extends StatementHandler {
 			case '=':
 				return createToken(EQUALS, asString);
 			case '+':
-				// TODO actually a constant?
-				return createToken(PLUS, asString);
+				char peek = peekChar();
+				// literal sign or operator?
+				if (Character.isDigit(peek) || peek == '.')
+					return constant();
+				else
+					return createToken(PLUS, asString);
 			case '-':
-				// TODO actually a constant?
+				peek = peekChar();
+				// literal sign or operator?
+				if (Character.isDigit(peek) || peek == '.')
+					return constant();
+				else
 				return createToken(MINUS, asString);
 			case '*':
 				if (peekChar() == '*') {
@@ -167,10 +178,12 @@ class LexerImpl extends StatementHandler {
 	}
 
 	private char nextChar() {
-		offset++;
-		if (offset < stmt.length())
-			return c = stmt.charAt(offset);
-		else
+		if (offset < stmt.length()) {
+			// load next char and increment offset to its position
+			c = stmt.charAt(offset + 1);
+			offset++;
+			return c;
+		} else
 			return c = 0;
 	}
 
