@@ -36,6 +36,7 @@ class LexerImpl extends StatementHandler {
 		// TODO better control flow
 		while (l != null) {
 			tokens.add(l);
+			nextChar();
 			l = start();
 		}
 
