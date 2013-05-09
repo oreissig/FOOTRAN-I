@@ -45,7 +45,7 @@ class LexerImpl extends StatementHandler {
 
 	private Token start() {
 		while (c != 0 && Character.isWhitespace(c))
-			next();
+			nextChar();
 		if (c == 0)
 			return null;
 
@@ -78,11 +78,10 @@ class LexerImpl extends StatementHandler {
 	private TokenType getIdentType(String ident) {
 		if (Keywords.isKeyword(ident))
 			// a reserved keyword
-			return TokenType.valueOf(ident.toUpperCase());
+			return TokenType.valueOf(ident);
 		else {
 			// some identifier
-			
-			// TODO lex idents
+			int start = offset - ident.length();
 			/**
 			 * Functions.
 			 * 
@@ -91,25 +90,36 @@ class LexerImpl extends StatementHandler {
 			 * and the first must be alphabetic. Also, the first must be X if
 			 * and only if the value of the function is to be fixed point.
 			 */
-			if (ident.endsWith("F"))
-				return FUNC_INT;
-			/**
-			 * Floating Point Variables.
-			 * 
-			 * 1 to 6 alphabetic or numeric characters (not special characters)
-			 * of which the first is alphabetic but not I, J, K, l, M, or N.
-			 */
-			/**
-			 * Fixed Point Variables.
-			 * 
-			 * 1 to 6 alphabetic or numeric characters (not special characters)
-			 * of which the first is I, J, K, l, M, or N.
-			 */
-			else if (ident.charAt(0) >= 'I')
-				// "if a subscripted variable has 4 or more characters in its name, the last of these must not be an F"
-				return VAR_INT;
+			// "if a subscripted variable has 4 or more characters in its name, the last of these must not be an F"
+			if (ident.length() >= 4 && ident.endsWith("F")) {
+				if (ident.length() > 7)
+					warn("function identifier too long (up to 7 characters allowed)", start);
+				
+				if (ident.startsWith("X"))
+					return FUNC_INT;
+				else
+					return FUNC_FLOAT;
+			} else {
+				/**
+				 * Floating Point Variables.
+				 * 
+				 * 1 to 6 alphabetic or numeric characters (not special characters)
+				 * of which the first is alphabetic but not I, J, K, L, M, or N.
+				 */
+				/**
+				 * Fixed Point Variables.
+				 * 
+				 * 1 to 6 alphabetic or numeric characters (not special characters)
+				 * of which the first is I, J, K, l, M, or N.
+				 */
+				if (ident.length() > 6)
+					warn("variable identifier too long (up to 6 characters allowed)", start);
+				if (ident.charAt(0) >= 'I' && ident.charAt(0) <= 'N')
+					return VAR_INT;
+				else
+					return VAR_FLOAT;
+			}
 		}
-		return null;
 	}
 
 	private Token constant() {
