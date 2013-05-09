@@ -1,5 +1,12 @@
 package fortran.reader;
 
+/**
+ * A {@link Card} implementation for testing purposes.
+ * 
+ * Use {@link #builder()} to construct a new instance.
+ * 
+ * @author oreissig
+ */
 public class TestCard implements Card, TestCardBuilder {
 
 	private int lineNo = -1;
@@ -19,6 +26,7 @@ public class TestCard implements Card, TestCardBuilder {
 		return new TestCard();
 	}
 
+	@Override
 	public Card build() {
 		return this;
 	}
@@ -58,6 +66,12 @@ public class TestCard implements Card, TestCardBuilder {
 	@Override
 	public int getStatementNumber() {
 		return number;
+	}
+
+	@Override
+	public TestCardBuilder setStatementNumber(int number) {
+		this.number = number;
+		return this;
 	}
 
 	@Override
@@ -106,30 +120,6 @@ public class TestCard implements Card, TestCardBuilder {
 	public TestCardBuilder setIdentifier(String ident) {
 		this.ident = ident;
 		return this;
-	}
-
-	public Integer getLineNo() {
-		return lineNo;
-	}
-
-	@Override
-	public TestCardBuilder setLineNo(Integer lineNo) {
-		this.lineNo = lineNo;
-		return this;
-	}
-
-	public Integer getNumber() {
-		return number;
-	}
-
-	@Override
-	public TestCardBuilder setNumber(Integer number) {
-		this.number = number;
-		return this;
-	}
-
-	public String getIdent() {
-		return ident;
 	}
 
 	@Override
