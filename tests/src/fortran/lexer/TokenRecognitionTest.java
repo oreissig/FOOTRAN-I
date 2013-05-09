@@ -24,9 +24,9 @@ public class TokenRecognitionTest {
 		Lexer l = create(Keywords.names);
 		for (TokenType type : Keywords.set) {
 			Statement stmt = l.next();
-			assertEquals(1, stmt.getTokens().size());
+			assertEquals(type.name(), 1, stmt.getTokens().size());
 			Token token = stmt.getTokens().get(0);
-			assertEquals(type, token.getType());
+			assertEquals(type.name(), type, token.getType());
 		}
 	}
 
@@ -40,10 +40,10 @@ public class TokenRecognitionTest {
 		Lexer l = create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
-			assertEquals(1, tokens.size());
+			assertEquals(s, 1, tokens.size());
 			Token t = tokens.get(0);
-			assertEquals(CONST_INT, t.getType());
-			assertEquals(s, t.getText());
+			assertEquals(s, CONST_INT, t.getType());
+			assertEquals(s, s, t.getText());
 		}
 	}
 
@@ -60,10 +60,10 @@ public class TokenRecognitionTest {
 		Lexer l = create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
-			assertEquals(1, tokens.size());
+			assertEquals(s, 1, tokens.size());
 			Token t = tokens.get(0);
-			assertEquals(CONST_FLOAT, t.getType());
-			assertEquals(s, t.getText());
+			assertEquals(s, CONST_FLOAT, t.getType());
+			assertEquals(s, s, t.getText());
 		}
 	}
 
@@ -77,10 +77,10 @@ public class TokenRecognitionTest {
 		Lexer l = create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
-			assertEquals(1, tokens.size());
+			assertEquals(s, 1, tokens.size());
 			Token t = tokens.get(0);
-			assertEquals(VAR_INT, t.getType());
-			assertEquals(s, t.getText());
+			assertEquals(s, VAR_INT, t.getType());
+			assertEquals(s, s, t.getText());
 		}
 	}
 
@@ -94,10 +94,10 @@ public class TokenRecognitionTest {
 		Lexer l = create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
-			assertEquals(1, tokens.size());
+			assertEquals(s, 1, tokens.size());
 			Token t = tokens.get(0);
-			assertEquals(VAR_FLOAT, t.getType());
-			assertEquals(s, t.getText());
+			assertEquals(s, VAR_FLOAT, t.getType());
+			assertEquals(s, s, t.getText());
 		}
 	}
 
@@ -113,10 +113,10 @@ public class TokenRecognitionTest {
 		Lexer l = create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
-			assertEquals(1, tokens.size());
+			assertEquals(s, 1, tokens.size());
 			Token t = tokens.get(0);
-			assertEquals(TokenType.FUNC_INT, t.getType());
-			assertEquals(s, t.getText());
+			assertEquals(s, TokenType.FUNC_INT, t.getType());
+			assertEquals(s, s, t.getText());
 		}
 	}
 
@@ -130,10 +130,10 @@ public class TokenRecognitionTest {
 		Lexer l = create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
-			assertEquals(1, tokens.size());
+			assertEquals(s, 1, tokens.size());
 			Token t = tokens.get(0);
-			assertEquals(TokenType.FUNC_FLOAT, t.getType());
-			assertEquals(s, t.getText());
+			assertEquals(s, TokenType.FUNC_FLOAT, t.getType());
+			assertEquals(s, s, t.getText());
 		}
 	}
 
@@ -154,17 +154,20 @@ public class TokenRecognitionTest {
 
 		Lexer l = create(inputs.keySet());
 		for (Entry<String, TokenType> e : inputs.entrySet()) {
+			String s = e.getKey();
+			TokenType type = e.getValue();
 			List<Token> tokens = l.next().getTokens();
-			assertEquals(1, tokens.size());
+			assertEquals(s, 1, tokens.size());
 			Token t = tokens.get(0);
-			assertEquals(e.getValue(), t.getType());
-			assertEquals(e.getKey(), t.getText());
+			assertEquals(s, type, t.getType());
+			assertEquals(s, s, t.getText());
 		}
 	}
 
 	private Lexer create(final Iterable<String> input) {
 		Iterator<Card> cards = new UnmodifiableIterator<Card>() {
-			final Iterator<String> i = input.iterator();
+			private final Iterator<String> i = input.iterator();
+			private int lineNo = 1;
 
 			@Override
 			public boolean hasNext() {
@@ -173,7 +176,10 @@ public class TokenRecognitionTest {
 
 			@Override
 			public Card next() {
-				return TestCard.builder().setStatement(i.next()).build();
+				return TestCard.builder()
+						.setStatement(i.next())
+						.setLineNumber(lineNo++)
+						.build();
 			}
 		};
 		return new LexerImpl(cards);
