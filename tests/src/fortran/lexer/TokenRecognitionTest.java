@@ -105,11 +105,9 @@ public class TokenRecognitionTest {
 	public void testIntFunctions() {
 		// manual page 12-13
 		String[] inputs = {
-				"SINF",
-				"SOMEF",
-				"SQRTF",
-				"SIN0F",
-				"SIN1F" };
+				"XTANF",
+				"XSIN0F",
+				"XSIN1F" };
 		Lexer l = create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
@@ -124,9 +122,11 @@ public class TokenRecognitionTest {
 	public void testFloatFunctions() {
 		// manual page 12-13
 		String[] inputs = {
-				"XTANF",
-				"XSIN0F",
-				"XSIN1F" };
+				"SINF",
+				"SOMEF",
+				"SQRTF",
+				"SIN0F",
+				"SIN1F" };
 		Lexer l = create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
