@@ -114,29 +114,52 @@ class LexerImpl extends StatementHandler {
 
 	private Token constant() {
 		int start = offset;
+		int maxLen = 5; // ints are limited to 5 digits
 		// leading sign?
-		if (c == '+' || c == '-')
+		if (c == '+' || c == '-') {
 			nextChar();
-		while (Character.isDigit(peekChar()))
+			// sign is no digit => increase maxLen
+			maxLen += 1;
+		}
+		while (Character.isDigit(c))
 			nextChar();
-		/**
-		 * Fixed Point Constants.
-		 * 
-		 * 1 to 5 decimal digits. A preceding + or - sign is optional. The
-		 * magnitude of the constant must be less than 32768.
-		 */
-
-		// TODO lex constants
-
-		/**
-		 * Floating Point Constants.
-		 * 
-		 * Any number of decimal digits, with a decimal point at the beginning,
-		 * at the end, or between two digits. A preceding + or - sign is
-		 * optional. A decimal exponent preceded by an E may follow.
-		 */
-		String text = stmt.substring(start, offset);
-		return null;
+		
+		if (c != '.') {
+			/**
+			 * Fixed Point Constants.
+			 * 
+			 * 1 to 5 decimal digits. A preceding + or - sign is optional. The
+			 * magnitude of the constant must be less than 32768.
+			 */
+			String text = stmt.substring(start, offset);
+			
+			if (text.length() > maxLen)
+				warn("Fixed Point Constants are only specified up to 5 digits", start);
+			else if (Math.abs(Integer.valueOf(text)) >= 32768)
+				warn("The magnitude of Fixed Point Constants must be less than 32768", start);
+			
+			return createToken(CONST_INT, start, offset);
+		} else {
+			/**
+			 * Floating Point Constants.
+			 * 
+			 * Any number of decimal digits, with a decimal point at the beginning,
+			 * at the end, or between two digits. A preceding + or - sign is
+			 * optional. A decimal exponent preceded by an E may follow.
+			 */
+			// skip '.'
+			nextChar();
+			// fractional part
+			while (Character.isDigit(nextChar()));
+			// exponent?
+			if (c == 'E') {
+				nextChar();
+				if (c == '+' || c == '-')
+					nextChar();
+				while (Character.isDigit(nextChar()));
+			}
+			return createToken(CONST_FLOAT, start, offset);
+		}
 	}
 
 	private Token misc() {
@@ -204,5 +227,16 @@ class LexerImpl extends StatementHandler {
 	private Token createToken(TokenType type, int start, int end) {
 		String text = stmt.substring(start, end);
 		return new TokenImpl(type, lineNo, Card.STATEMENT_OFFSET + start, text);
+	}
+	
+	/**
+	 * shortcut to issue a warning with a common prefix denoting
+	 * line number and the given offset
+	 * 
+	 * @param msg warning message
+	 * @param offset
+	 */
+	private void warn(String msg, int offset) {
+		log.warn("@{}:{} {}", lineNo, offset, msg);
 	}
 }
