@@ -63,4 +63,13 @@ class StatementImpl implements Statement, StatementBuilder {
 		else
 			return this;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("Statement ");
+		if (hasStatementNumber())
+			sb.append(getStatementNumber());
+		sb.append(tokens.toString());
+		return sb.toString();
+	}
 }

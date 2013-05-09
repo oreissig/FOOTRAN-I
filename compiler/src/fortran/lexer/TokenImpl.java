@@ -32,17 +32,17 @@ class TokenImpl implements Token {
 	public String getText() {
 		return text;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Token))
 			return false;
-		
+
 		Token o = (Token) obj;
-		return getType().equals(o.getType()) &&
-			   getLineNumber() == o.getLineNumber() &&
-			   getOffset() == o.getOffset() &&
-			   getText().equals(o.getText());
+		return getType().equals(o.getType())
+				&& getLineNumber() == o.getLineNumber()
+				&& getOffset() == o.getOffset()
+				&& getText().equals(o.getText());
 	}
 
 	@Override
@@ -51,5 +51,10 @@ class TokenImpl implements Token {
 			return o.getLineNumber() - getLineNumber();
 		else
 			return o.getOffset() - o.getOffset();
+	}
+
+	@Override
+	public String toString() {
+		return type.name() + " \"" + text + "\" @" + lineNumber + ":" + offset;
 	}
 }
