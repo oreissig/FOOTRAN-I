@@ -124,13 +124,6 @@ class LexerImpl extends StatementHandler {
 
 	private Token constant() {
 		int start = offset;
-		int maxLen = 5; // ints are limited to 5 digits
-		// leading sign?
-		if (c == '+' || c == '-') {
-			nextChar();
-			// sign is no digit => increase maxLen
-			maxLen += 1;
-		}
 		while (Character.isDigit(c))
 			nextChar();
 		
@@ -143,9 +136,9 @@ class LexerImpl extends StatementHandler {
 			 */
 			String text = stmt.substring(start, offset);
 			
-			if (text.length() > maxLen)
+			if (text.length() > 5)
 				warn("Fixed Point Constants are only specified up to 5 digits", start);
-			else if (Math.abs(Integer.valueOf(text)) >= 32768)
+			else if (Integer.valueOf(text) >= 32768)
 				warn("The magnitude of Fixed Point Constants must be less than 32768", start);
 			
 			return createToken(CONST_INT, start, offset);
@@ -184,18 +177,8 @@ class LexerImpl extends StatementHandler {
 			case '=':
 				return createToken(EQUALS, asString);
 			case '+':
-				char peek = peekChar();
-				// literal sign or operator?
-				if (Character.isDigit(peek) || peek == '.')
-					return constant();
-				else
-					return createToken(PLUS, asString);
+				return createToken(PLUS, asString);
 			case '-':
-				peek = peekChar();
-				// literal sign or operator?
-				if (Character.isDigit(peek) || peek == '.')
-					return constant();
-				else
 				return createToken(MINUS, asString);
 			case '*':
 				if (peekChar() == '*') {
