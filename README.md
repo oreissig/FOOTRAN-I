@@ -14,8 +14,8 @@ Those are referenced by the Eclipse projects as user libraries (Preferences -> J
 
 To Do:
 ------
-- `[x]` punched card handling
-- `[ ]` lexer
+- `[X]` punched card handling
+- `[.]` lexer
 - `[ ]` parser
 - `[ ]` code generation
 - `[ ]` optimizations
