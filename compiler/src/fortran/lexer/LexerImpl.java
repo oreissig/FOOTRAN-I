@@ -64,7 +64,7 @@ class LexerImpl extends StatementHandler {
 		
 		if (Character.isLetter(c))
 			t = ident();
-		else if (Character.isDigit(c))
+		else if (Character.isDigit(c) || c == '.')
 			t = constant();
 		else
 			t = misc();

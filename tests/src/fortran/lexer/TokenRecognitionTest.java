@@ -33,10 +33,11 @@ public class TokenRecognitionTest {
 	@Test
 	public void testIntConstants() {
 		// manual page 9
+		// leave out signs in the examples, they are not part of the token
 		String[] inputs = {
 				"3",
-				"+1",
-				"-28987" };
+				"1",
+				"28987" };
 		Lexer l = create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
@@ -50,10 +51,11 @@ public class TokenRecognitionTest {
 	@Test
 	public void testFloatConstants() {
 		// manual page 9
+		// leave out signs in the examples, they are not part of the token
 		String[] inputs = {
 				"17.",
 				"5.0",
-				"-.0003",
+				".0003",
 				"5.0E3",
 				"5.0E+3",
 				"5.0E-7" };
