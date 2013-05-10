@@ -127,7 +127,7 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 			cards.next();
 		}
 	}
-	
+
 	/**
 	 * shortcut to issue a warning with a common prefix denoting
 	 * line number and the given offset
@@ -138,7 +138,7 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 	void warn(String msg, int offset) {
 		log.warn("@{}:{} {}", lineNo, offset, msg);
 	}
-	
+
 	/**
 	 * shortcut to issue an error with a common prefix denoting
 	 * line number and the given offset
