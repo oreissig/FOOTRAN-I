@@ -26,7 +26,7 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 	private final PeekingIterator<Card> cards;
 
 	/**
-	 * Creates a new Lexer based on the given stream of {@link Card}s.
+	 * Creates a new StatementHandler based on the given stream of {@link Card}s.
 	 * 
 	 * @param cards
 	 *            to lex
@@ -36,16 +36,6 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 			this.cards = (PeekingIterator<Card>) cards;
 		else
 			this.cards = Iterators.peekingIterator(cards);
-	}
-
-	/**
-	 * Creates a new Lexer based on the given {@link Card}s.
-	 * 
-	 * @param cards
-	 *            to lex
-	 */
-	public StatementHandler(Iterable<Card> cards) {
-		this(cards.iterator());
 	}
 
 	@Override
@@ -60,7 +50,7 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 			return endOfData();
 		if (current.isContinuation())
 			log.error("statement at line {} starts with continuation {}",
-					current.getLineNumber(), current.getContinuation());
+					  current.getLineNumber(), current.getContinuation());
 		lex(current, stmt);
 
 		// check for continuations
@@ -71,12 +61,12 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 			if (!Character.isDigit(current.getContinuation()))
 				log.warn("continuations are only specified for values 0-9, got {} instead at line {}",
 						 current.getContinuation(), current.getLineNumber());
-			else if (current.getContinuation() != lastContinuation+1)
+			else if (current.getContinuation() != lastContinuation + 1)
 				log.warn("Expected continuation {}, got {} at line {}",
-						 (char)(lastContinuation+1), current.getContinuation(),
+						 (char) (lastContinuation + 1), current.getContinuation(),
 						 current.getLineNumber());
 			lastContinuation = current.getContinuation();
-			
+
 			lex(current, stmt);
 		}
 
@@ -92,7 +82,7 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 	/**
 	 * Does the lexing for a given card.
 	 * 
-	 * @param card 
+	 * @param card
 	 *            with statement to lex
 	 * @return list of tokens
 	 */

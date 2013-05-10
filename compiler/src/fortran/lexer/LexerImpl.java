@@ -15,10 +15,22 @@ class LexerImpl extends StatementHandler {
 	private int offset;
 	private char c;
 
+	/**
+	 * Creates a new Lexer based on the given stream of {@link Card}s.
+	 * 
+	 * @param cards
+	 *            to lex
+	 */
 	public LexerImpl(Iterable<Card> cards) {
-		super(cards);
+		this(cards.iterator());
 	}
 
+	/**
+	 * Creates a new Lexer based on the given {@link Card}s.
+	 * 
+	 * @param cards
+	 *            to lex
+	 */
 	public LexerImpl(Iterator<Card> cards) {
 		super(cards);
 	}
