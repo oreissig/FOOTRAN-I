@@ -8,7 +8,11 @@ package fortran.reader;
  */
 public interface Card extends Comparable<Card> {
 
+	public static final int COMMENT_OFFSET = 0;
+	public static final int NUMBER_OFFSET = 0;
+	public static final int CONTINUATION_OFFSET = 5;
 	public static final int STATEMENT_OFFSET = 6;
+	public static final int IDENT_OFFSET = 72;
 
 	/**
 	 * @return <tt>true</tt> if a line number is associated with this card,

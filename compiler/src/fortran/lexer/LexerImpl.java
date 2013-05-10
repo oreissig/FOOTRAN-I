@@ -11,7 +11,6 @@ import fortran.reader.Card;
 class LexerImpl extends StatementHandler {
 
 	private String stmt;
-	private int lineNo;
 	private int offset;
 	private char c;
 
@@ -36,12 +35,11 @@ class LexerImpl extends StatementHandler {
 	}
 
 	@Override
-	protected List<Token> lex(Card card) {
+	protected List<Token> lex(String statement) {
 		List<Token> tokens = new ArrayList<>();
 		offset = -1;
 		c = 0;
-		stmt = card.getStatement();
-		lineNo = card.getLineNumber();
+		stmt = statement;
 		nextChar();
 
 		Token l = start();
@@ -232,16 +230,5 @@ class LexerImpl extends StatementHandler {
 	private Token createToken(TokenType type, int start, int end) {
 		String text = stmt.substring(start, end);
 		return new TokenImpl(type, lineNo, Card.STATEMENT_OFFSET + start, text);
-	}
-	
-	/**
-	 * shortcut to issue a warning with a common prefix denoting
-	 * line number and the given offset
-	 * 
-	 * @param msg warning message
-	 * @param offset
-	 */
-	private void warn(String msg, int offset) {
-		log.warn("@{}:{} {}", lineNo, offset, msg);
 	}
 }

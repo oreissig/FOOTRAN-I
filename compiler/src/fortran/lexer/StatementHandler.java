@@ -24,6 +24,7 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 	static final Logger log = LoggerFactory.getLogger(Lexer.class);
 
 	private final PeekingIterator<Card> cards;
+	int lineNo = -1;
 
 	/**
 	 * Creates a new StatementHandler based on the given stream of {@link Card}s.
@@ -49,8 +50,8 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 			// EOF
 			return endOfData();
 		if (current.isContinuation())
-			log.error("statement at line {} starts with continuation {}",
-					  current.getLineNumber(), current.getContinuation());
+			error("statement starts with continuation " + current.getContinuation(),
+				  Card.CONTINUATION_OFFSET);
 		lex(current, stmt);
 
 		// check for continuations
@@ -59,12 +60,11 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 			current = nextCard();
 			// check sanity of continuation mark
 			if (!Character.isDigit(current.getContinuation()))
-				log.warn("continuations are only specified for values 0-9, got {} instead at line {}",
-						 current.getContinuation(), current.getLineNumber());
+				warn("continuations are only specified for values 0-9, got " +
+					 current.getContinuation(), Card.CONTINUATION_OFFSET);
 			else if (current.getContinuation() != lastContinuation + 1)
-				log.warn("Expected continuation {}, got {} at line {}",
-						 (char) (lastContinuation + 1), current.getContinuation(),
-						 current.getLineNumber());
+				warn("Expected continuation " + (char) (lastContinuation + 1) +
+					 ", got " + current.getContinuation(), Card.CONTINUATION_OFFSET);
 			lastContinuation = current.getContinuation();
 
 			lex(current, stmt);
@@ -75,18 +75,19 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 
 	private void lex(Card current, StatementBuilder stmt) {
 		stmt.addCard(current);
-		for (Token l : lex(current))
-			stmt.addToken(l);
+		List<Token> tokens = lex(current.getStatement());
+		for (Token t : tokens)
+			stmt.addToken(t);
 	}
 
 	/**
 	 * Does the lexing for a given card.
 	 * 
-	 * @param card
-	 *            with statement to lex
+	 * @param statement
+	 *            to lex
 	 * @return list of tokens
 	 */
-	protected abstract List<Token> lex(Card card);
+	protected abstract List<Token> lex(String statement);
 
 	/**
 	 * Reads the next non-comment card.
@@ -102,6 +103,7 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 				return null;
 			}
 		} while (next.isComment());
+		lineNo = next.getLineNumber();
 		return next;
 	}
 
@@ -124,5 +126,27 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 			// skip card
 			cards.next();
 		}
+	}
+	
+	/**
+	 * shortcut to issue a warning with a common prefix denoting
+	 * line number and the given offset
+	 * 
+	 * @param msg warning message
+	 * @param offset
+	 */
+	void warn(String msg, int offset) {
+		log.warn("@{}:{} {}", lineNo, offset, msg);
+	}
+	
+	/**
+	 * shortcut to issue an error with a common prefix denoting
+	 * line number and the given offset
+	 * 
+	 * @param msg error message
+	 * @param offset
+	 */
+	void error(String msg, int offset) {
+		log.error("@{}:{} {}", lineNo, offset, msg);
 	}
 }
