@@ -15,12 +15,6 @@ public interface Card extends Comparable<Card> {
 	public static final int IDENT_OFFSET = 72;
 
 	/**
-	 * @return <tt>true</tt> if a line number is associated with this card,
-	 *         <tt>false</tt> otherwise
-	 */
-	public abstract boolean hasLineNumber();
-
-	/**
 	 * @return line (card) number, undefined if none has been given
 	 */
 	public abstract int getLineNumber();

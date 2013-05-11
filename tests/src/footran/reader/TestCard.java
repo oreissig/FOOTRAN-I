@@ -11,7 +11,8 @@ import footran.reader.Card;
  */
 public class TestCard implements Card, TestCardBuilder {
 
-	private int lineNo = -1;
+	private static int defaultLineNo = 1;
+	private int lineNo;
 	private boolean comment = false;
 	private Character continuation = null;
 	private Integer number = null;
@@ -22,6 +23,9 @@ public class TestCard implements Card, TestCardBuilder {
 	 * forbid direct instantiation, use {@link #builder()}
 	 */
 	private TestCard() {
+		synchronized (TestCard.class) {
+			setLineNumber(defaultLineNo++);
+		}
 	}
 
 	public static TestCardBuilder builder() {
@@ -31,11 +35,6 @@ public class TestCard implements Card, TestCardBuilder {
 	@Override
 	public Card build() {
 		return this;
-	}
-
-	@Override
-	public boolean hasLineNumber() {
-		return lineNo >= 0;
 	}
 
 	@Override

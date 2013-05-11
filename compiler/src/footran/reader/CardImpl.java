@@ -1,25 +1,14 @@
 package footran.reader;
 
 class CardImpl implements Card {
-	private static final int NO_NUMBER = -1;
 	private static final int NO_CONTINUATION = '0';
 
 	private final int lineNo;
 	private final boolean comment;
 	private final char continuation;
-	private final int number;
+	private final Integer number;
 	private final String statement;
 	private final String ident;
-
-	/**
-	 * Creates a new punched card representation without a line number.
-	 * 
-	 * @param line
-	 *            to parse
-	 */
-	public CardImpl(String line) {
-		this(line, NO_NUMBER);
-	}
 
 	/**
 	 * Creates a new punched card representation.
@@ -48,7 +37,7 @@ class CardImpl implements Card {
 			int start = comment ? 1 : 0;
 			String numTag = line.substring(start, 5).trim();
 			if (numTag.isEmpty())
-				number = NO_NUMBER;
+				number = null;
 			else {
 				number = Integer.parseInt(numTag);
 				if (number < 0)
@@ -57,7 +46,7 @@ class CardImpl implements Card {
 					throw new CardException("statement number must be smaller than 32768");
 			}
 		} else {
-			number = NO_NUMBER;
+			number = null;
 		}
 
 		if (line.length() >= 6) {
@@ -89,11 +78,6 @@ class CardImpl implements Card {
 	}
 
 	@Override
-	public boolean hasLineNumber() {
-		return lineNo != NO_NUMBER;
-	}
-
-	@Override
 	public int getLineNumber() {
 		return lineNo;
 	}
@@ -105,7 +89,7 @@ class CardImpl implements Card {
 
 	@Override
 	public boolean hasStatementNumber() {
-		return number != NO_NUMBER;
+		return number != null;
 	}
 
 	@Override
@@ -146,8 +130,7 @@ class CardImpl implements Card {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		if (hasLineNumber())
-			sb.append(getLineNumber()).append(": ");
+		sb.append(getLineNumber()).append(": ");
 		if (isComment())
 			sb.append("Comment: ");
 		if (hasStatementNumber())
