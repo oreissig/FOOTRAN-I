@@ -238,13 +238,6 @@ class LexerImpl extends StatementHandler {
 		}
 	}
 
-	private char peekChar() {
-		if (offset+1 < stmt.length())
-			return stmt.charAt(offset + 1);
-		else
-			return 0;
-	}
-
 	private Token createToken(TokenType type, int start, int end) {
 		String text = stmt.substring(start, end);
 		return new TokenImpl(type, lineNo, Card.STATEMENT_OFFSET + start, text);
