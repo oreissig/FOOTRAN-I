@@ -46,7 +46,6 @@ class LexerImpl extends StatementHandler {
 		// TODO better control flow
 		while (l != null) {
 			tokens.add(l);
-			nextChar();
 			l = start();
 		}
 
@@ -134,8 +133,7 @@ class LexerImpl extends StatementHandler {
 
 	private Token constant() {
 		int start = offset;
-		while (Character.isDigit(c))
-			nextChar();
+		while (Character.isDigit(nextChar()));
 		
 		if (c != '.') {
 			/**
@@ -178,29 +176,30 @@ class LexerImpl extends StatementHandler {
 	}
 
 	private Token misc() {
-		String asString = Character.toString(c);
-		switch (c) {
+		int start = offset;
+		char lastChar = c;
+		nextChar();
+		switch (lastChar) {
 			case '(':
-				return createToken(PAREN1, asString);
+				return createToken(PAREN1, start, offset);
 			case ')':
-				return createToken(PAREN2, asString);
+				return createToken(PAREN2, start, offset);
 			case ',':
-				return createToken(COMMA, asString);
+				return createToken(COMMA, start, offset);
 			case '=':
-				return createToken(EQUALS, asString);
+				return createToken(EQUALS, start, offset);
 			case '+':
-				return createToken(PLUS, asString);
+				return createToken(PLUS, start, offset);
 			case '-':
-				return createToken(MINUS, asString);
+				return createToken(MINUS, start, offset);
 			case '*':
 				if (peekChar() == '*') {
-					Token t = createToken(EXP, "**");
 					nextChar(); 
-					return t;
+					return createToken(EXP, start, offset);
 				} else
-					return createToken(MUL, asString);
+					return createToken(MUL, start, offset);
 			case '/':
-				return createToken(DIV, asString);
+				return createToken(DIV, start, offset);
 			default:
 				return null;
 		}
@@ -223,10 +222,6 @@ class LexerImpl extends StatementHandler {
 			return stmt.charAt(offset + 1);
 		else
 			return 0;
-	}
-
-	private Token createToken(TokenType type, String text) {
-		return new TokenImpl(type, lineNo, Card.STATEMENT_OFFSET + offset, text);
 	}
 
 	private Token createToken(TokenType type, int start, int end) {
