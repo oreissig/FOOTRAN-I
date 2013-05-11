@@ -77,7 +77,8 @@ class LexerImpl extends StatementHandler {
 
 	private Token ident() {
 		int start = offset;
-		while (Character.isLetterOrDigit(nextChar()));
+		while (Character.isLetterOrDigit(c))
+			nextChar();
 		String text = stmt.substring(start, offset);
 		TokenType type = getIdentType(text);
 
@@ -133,7 +134,8 @@ class LexerImpl extends StatementHandler {
 
 	private Token constant() {
 		int start = offset;
-		while (Character.isDigit(nextChar()));
+		while (Character.isDigit(c))
+			nextChar();
 		
 		if (c != '.') {
 			/**
@@ -161,7 +163,8 @@ class LexerImpl extends StatementHandler {
 			// skip '.'
 			nextChar();
 			// fractional part
-			while (Character.isDigit(nextChar()));
+			while (Character.isDigit(c))
+				nextChar();
 			if (offset - start == 1)
 				warn("Floating Point Constant only consists of '.', assuming 0.0", start);
 			// exponent?
@@ -169,7 +172,11 @@ class LexerImpl extends StatementHandler {
 				nextChar();
 				if (c == '+' || c == '-')
 					nextChar();
-				while (Character.isDigit(nextChar()));
+				if (!Character.isDigit(c))
+					warn("missing exponential part", offset);
+				else
+					while (Character.isDigit(c))
+						nextChar();
 			}
 			return createToken(CONST_FLOAT, start, offset);
 		}

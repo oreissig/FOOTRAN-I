@@ -48,25 +48,95 @@ public class ComplexLexingTest {
 
 	public void testSubscriptedVariable() {
 		// manual page 11
-		// TODO
+		String[] inputs = {
+				"A(I)",
+				"K(3)",
+				"BETA(5*J-2,K+2,L)" };
+		Lexer l = LexUtil.create(inputs);
+
+		// A(I)
+		assertStatement(new TokenType[]
+				{ VAR_FLOAT, PAREN1, VAR_INT, PAREN2 },
+				l.next());
+
+		// K(3)
+		assertStatement(new TokenType[]
+				{ VAR_INT, PAREN1, VAR_INT, PAREN2 },
+				l.next());
+
+		// BETA(5*J-2,K+2,L)
+		assertStatement(new TokenType[]
+				{ VAR_FLOAT, PAREN1, CONST_INT, MUL, VAR_INT, MINUS, CONST_INT,
+					COMMA, VAR_INT, PLUS, CONST_INT, COMMA, VAR_INT, PAREN2 },
+				l.next());
 	}
 
 	@Test
 	public void testFunctions() {
 		// manual page 12
-		// TODO
-	}
+		String[] inputs = {
+				"SINF(A+B)",
+				"SOMEF(X,Y)",
+				"SQRTF(SINF(A))",
+				"XTANF(3.*X)" };
+		
+		Lexer l = LexUtil.create(inputs);
 
-	@Test
-	public void testExpressions() {
-		// manual page 14-15
-		// TODO
+		// SINF(A+B)
+		assertStatement(new TokenType[]
+				{ FUNC_FLOAT, PAREN1, VAR_FLOAT, PLUS, VAR_FLOAT , PAREN2 },
+				l.next());
+
+		// SOMEF(X,Y)
+		assertStatement(new TokenType[]
+				{ FUNC_FLOAT, PAREN1, VAR_FLOAT, COMMA, VAR_FLOAT , PAREN2 },
+				l.next());
+
+		// SQRTF(SINF(A))
+		assertStatement(new TokenType[]
+				{ FUNC_FLOAT, PAREN1, FUNC_FLOAT, PAREN1, VAR_FLOAT , PAREN2 ,
+					PAREN2 },
+				l.next());
+
+		// XTANF(3.*X)
+		assertStatement(new TokenType[]
+				{ FUNC_INT, PAREN1, CONST_FLOAT, MUL, VAR_FLOAT , PAREN2 },
+				l.next());
 	}
 
 	@Test
 	public void testArithmeticFormulas() {
 		// manual page 16
-		// TODO
+		String[] inputs = {
+				"I=I+1",
+				"A=MAX1F(SINF(B), COSF(B))",
+				"A=3.0*B",
+				"A(I)=B(I)+SINF(C(I))" };
+		Lexer l = LexUtil.create(inputs);
+
+		// I=I+1
+		assertStatement(new TokenType[]
+				{ VAR_INT, EQUALS, VAR_INT, PLUS, CONST_INT },
+				l.next());
+
+		// A=MAX1F(SINF(B), COSF(B))
+		assertStatement(new TokenType[]
+				{ VAR_FLOAT, EQUALS, FUNC_FLOAT, PAREN1, FUNC_FLOAT, PAREN1,
+					VAR_FLOAT, PAREN2, COMMA, FUNC_FLOAT, PAREN1, VAR_FLOAT,
+					PAREN2, PAREN2 },
+				l.next());
+
+		// A=3.0*B
+		assertStatement(new TokenType[]
+				{ VAR_FLOAT, EQUALS, CONST_FLOAT, MUL, VAR_FLOAT },
+				l.next());
+
+		// A(I)=B(I)+SINF(C(I))
+		assertStatement(new TokenType[]
+				{ VAR_FLOAT, PAREN1, VAR_INT, PAREN2, EQUALS, VAR_FLOAT, PAREN1,
+					VAR_INT, PAREN2, PLUS, FUNC_FLOAT, PAREN1, VAR_FLOAT,
+					PAREN1, VAR_INT, PAREN2, PAREN2 },
+				l.next());
 	}
 
 	@Test
