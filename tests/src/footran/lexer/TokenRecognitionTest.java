@@ -3,8 +3,6 @@ package footran.lexer;
 import static footran.lexer.TokenType.*;
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,22 +10,12 @@ import java.util.Map.Entry;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.UnmodifiableIterator;
-
-import footran.lexer.Keywords;
-import footran.lexer.Lexer;
-import footran.lexer.LexerImpl;
-import footran.lexer.Statement;
-import footran.lexer.Token;
-import footran.lexer.TokenType;
-import footran.reader.Card;
-import footran.reader.TestCard;
 
 public class TokenRecognitionTest {
 	@Test
 	public void testKeywords() {
 		// manual page 55
-		Lexer l = create(Keywords.names);
+		Lexer l = LexUtil.create(Keywords.names);
 		for (TokenType type : Keywords.set) {
 			Statement stmt = l.next();
 			assertEquals(type.name(), 1, stmt.getTokens().size());
@@ -44,7 +32,7 @@ public class TokenRecognitionTest {
 				"3",
 				"1",
 				"28987" };
-		Lexer l = create(inputs);
+		Lexer l = LexUtil.create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
 			assertEquals(s, 1, tokens.size());
@@ -65,7 +53,7 @@ public class TokenRecognitionTest {
 				"5.0E3",
 				"5.0E+3",
 				"5.0E-7" };
-		Lexer l = create(inputs);
+		Lexer l = LexUtil.create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
 			assertEquals(s, 1, tokens.size());
@@ -82,7 +70,7 @@ public class TokenRecognitionTest {
 				"I",
 				"M2",
 				"JOBN0" };
-		Lexer l = create(inputs);
+		Lexer l = LexUtil.create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
 			assertEquals(s, 1, tokens.size());
@@ -99,7 +87,7 @@ public class TokenRecognitionTest {
 				"A",
 				"B7",
 				"DELTA" };
-		Lexer l = create(inputs);
+		Lexer l = LexUtil.create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
 			assertEquals(s, 1, tokens.size());
@@ -116,7 +104,7 @@ public class TokenRecognitionTest {
 				"XTANF",
 				"XSIN0F",
 				"XSIN1F" };
-		Lexer l = create(inputs);
+		Lexer l = LexUtil.create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
 			assertEquals(s, 1, tokens.size());
@@ -135,7 +123,7 @@ public class TokenRecognitionTest {
 				"SQRTF",
 				"SIN0F",
 				"SIN1F" };
-		Lexer l = create(inputs);
+		Lexer l = LexUtil.create(inputs);
 		for (String s : inputs) {
 			List<Token> tokens = l.next().getTokens();
 			assertEquals(s, 1, tokens.size());
@@ -160,7 +148,7 @@ public class TokenRecognitionTest {
 				.put("/", DIV)
 				.build();
 
-		Lexer l = create(inputs.keySet());
+		Lexer l = LexUtil.create(inputs.keySet());
 		for (Entry<String, TokenType> e : inputs.entrySet()) {
 			String s = e.getKey();
 			TokenType type = e.getValue();
@@ -170,30 +158,5 @@ public class TokenRecognitionTest {
 			assertEquals(s, type, t.getType());
 			assertEquals(s, s, t.getText());
 		}
-	}
-
-	private Lexer create(final Iterable<String> input) {
-		Iterator<Card> cards = new UnmodifiableIterator<Card>() {
-			private final Iterator<String> i = input.iterator();
-			private int lineNo = 1;
-
-			@Override
-			public boolean hasNext() {
-				return i.hasNext();
-			}
-
-			@Override
-			public Card next() {
-				return TestCard.builder()
-						.setStatement(i.next())
-						.setLineNumber(lineNo++)
-						.build();
-			}
-		};
-		return new LexerImpl(cards);
-	}
-
-	private Lexer create(final String[] input) {
-		return create(Arrays.asList(input));
 	}
 }
