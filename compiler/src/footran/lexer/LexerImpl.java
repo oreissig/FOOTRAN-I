@@ -193,7 +193,7 @@ class LexerImpl extends StatementHandler {
 			case '-':
 				return createToken(MINUS, start, offset);
 			case '*':
-				if (peekChar() == '*') {
+				if (c == '*') {
 					nextChar(); 
 					return createToken(EXP, start, offset);
 				} else
