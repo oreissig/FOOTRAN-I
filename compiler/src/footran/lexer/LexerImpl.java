@@ -13,6 +13,11 @@ class LexerImpl extends StatementHandler {
 	private String stmt;
 	private int offset;
 	private char c;
+	/**
+	 * activated when STOP was read to indicate, that the following CONST_INT
+	 * will be read as octal
+	 */
+	private boolean octalMode = false;
 
 	/**
 	 * Creates a new Lexer based on the given stream of {@link Card}s.
@@ -71,8 +76,11 @@ class LexerImpl extends StatementHandler {
 		if (t == null)
 			throw new LexicalException("invalid token at " + lineNo + ":"
 					+ start + " \"" + stmt.substring(start, offset) + "\"");
-		else
-			return t;
+		
+		// activate octal mode on STOP/PAUSE, deactivate otherwise
+		octalMode = t.getType() == STOP || t.getType() == PAUSE;
+		
+		return t;
 	}
 
 	private Token ident() {
@@ -134,6 +142,12 @@ class LexerImpl extends StatementHandler {
 
 	private Token constant() {
 		int start = offset;
+		if (octalMode) {
+			while (c >= '0' && c <= '7')
+				nextChar();
+			return createToken(CONST_OCTAL, start, offset);
+		}
+		// normal mode
 		while (Character.isDigit(c))
 			nextChar();
 		

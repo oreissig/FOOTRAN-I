@@ -159,4 +159,16 @@ public class TokenRecognitionTest {
 			assertEquals(s, s, t.getText());
 		}
 	}
+
+	@Test
+	public void testOctal() {
+		// manual page 20-21
+		String[] inputs = {
+				"STOP 0123",
+				"PAUSE 4567" };
+		Lexer l = LexUtil.create(inputs);
+
+		assertEquals(CONST_OCTAL, l.next().getTokens().get(1).getType());
+		assertEquals(CONST_OCTAL, l.next().getTokens().get(1).getType());
+	}
 }

@@ -103,6 +103,8 @@ public enum TokenType {
     FUNC_FLOAT,
     /** Fixed Point Constant */
     CONST_INT,
+    /** Octal Fixed Point Constant */
+    CONST_OCTAL,
     /** Floating Point Constant */
     CONST_FLOAT
 }
