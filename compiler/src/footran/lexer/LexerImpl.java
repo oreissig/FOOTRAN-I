@@ -164,6 +164,8 @@ class LexerImpl extends StatementHandler {
 			nextChar();
 			// fractional part
 			while (Character.isDigit(nextChar()));
+			if (offset - start == 1)
+				warn("Floating Point Constant only consists of '.', assuming 0.0", start);
 			// exponent?
 			if (c == 'E') {
 				nextChar();

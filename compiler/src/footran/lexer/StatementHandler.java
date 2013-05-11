@@ -50,7 +50,7 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 			// EOF
 			return endOfData();
 		if (current.isContinuation())
-			error("statement starts with continuation " + current.getContinuation(),
+			warn("statement starts with continuation " + current.getContinuation(),
 				  Card.CONTINUATION_OFFSET);
 		lex(current, stmt);
 
@@ -139,16 +139,5 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 	 */
 	void warn(String msg, int offset) {
 		log.warn("@{}:{} {}", lineNo, offset, msg);
-	}
-
-	/**
-	 * shortcut to issue an error with a common prefix denoting
-	 * line number and the given offset
-	 * 
-	 * @param msg error message
-	 * @param offset
-	 */
-	void error(String msg, int offset) {
-		log.error("@{}:{} {}", lineNo, offset, msg);
 	}
 }
