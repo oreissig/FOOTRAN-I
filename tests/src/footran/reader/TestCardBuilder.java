@@ -12,7 +12,7 @@ public interface TestCardBuilder {
 
 	public TestCardBuilder setLineNumber(int lineNo);
 
-	public TestCardBuilder setComment(boolean comment);
+	public TestCardBuilder setComment();
 
 	public TestCardBuilder setContinuation(char continuation);
 

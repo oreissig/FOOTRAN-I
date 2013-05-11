@@ -55,8 +55,8 @@ public class TestCard implements Card, TestCardBuilder {
 	}
 
 	@Override
-	public TestCardBuilder setComment(boolean comment) {
-		this.comment = comment;
+	public TestCardBuilder setComment() {
+		this.comment = true;
 		return this;
 	}
 
