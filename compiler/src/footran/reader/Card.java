@@ -50,8 +50,8 @@ public interface Card extends Comparable<Card> {
 	public abstract char getContinuation();
 
 	/**
-	 * @return <tt>true</tt> if this card has a statement, <tt>false</tt>
-	 *         otherwise
+	 * @return <tt>true</tt> if this card has a (non-empty) statement,
+	 *         <tt>false</tt> otherwise
 	 */
 	public abstract boolean hasStatement();
 

@@ -75,9 +75,11 @@ abstract class StatementHandler extends AbstractIterator<Statement> implements L
 
 	private void lex(Card current, StatementBuilder stmt) {
 		stmt.addCard(current);
-		List<Token> tokens = lex(current.getStatement());
-		for (Token t : tokens)
-			stmt.addToken(t);
+		if (current.hasStatement()) {
+			List<Token> tokens = lex(current.getStatement());
+			for (Token t : tokens)
+				stmt.addToken(t);
+		}
 	}
 
 	/**

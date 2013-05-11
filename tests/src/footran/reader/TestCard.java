@@ -93,7 +93,7 @@ public class TestCard implements Card, TestCardBuilder {
 
 	@Override
 	public boolean hasStatement() {
-		return statement != null;
+		return statement != null && !statement.trim().isEmpty();
 	}
 
 	@Override

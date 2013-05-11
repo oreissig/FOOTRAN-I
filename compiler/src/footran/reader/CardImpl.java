@@ -109,7 +109,7 @@ class CardImpl implements Card {
 
 	@Override
 	public boolean hasStatement() {
-		return statement != null && !statement.isEmpty();
+		return statement != null && !statement.trim().isEmpty();
 	}
 
 	@Override
