@@ -4,4 +4,4 @@ C    X      ATTAINED BY A SET OF NUMBERS
        DO 20  I = 2,N
        IF (BIGA - A(I)) 10, 20, 20
    10  BIGA = A(1)
-   20  CONTINUE 
+   20  CONTINUE
