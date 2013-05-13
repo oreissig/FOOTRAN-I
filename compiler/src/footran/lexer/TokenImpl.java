@@ -1,6 +1,16 @@
 package footran.lexer;
 
+import static footran.lexer.TokenType.*;
+
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
 class TokenImpl implements Token {
+	private static final Set<TokenType> printTextFor =
+			Collections.unmodifiableSet(
+					EnumSet.range(VAR_INT, CONST_FLOAT));
+	
 	private final TokenType type;
 	private final int lineNumber;
 	private final int offset;
@@ -55,6 +65,16 @@ class TokenImpl implements Token {
 
 	@Override
 	public String toString() {
-		return type.name() + " \"" + text + "\" @" + lineNumber + ":" + offset;
+		final StringBuilder sb = new StringBuilder(type.name());
+		if (printTextFor.contains(type)) {
+			sb.append(" \"")
+			  .append(text)
+			  .append('\"');
+		}
+		sb.append(" @")
+		  .append(lineNumber)
+		  .append(':')
+		  .append(offset);
+		return sb.toString();
 	}
 }

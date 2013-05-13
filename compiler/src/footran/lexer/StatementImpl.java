@@ -68,7 +68,8 @@ class StatementImpl implements Statement, StatementBuilder {
 	public String toString() {
 		StringBuilder sb = new StringBuilder("Statement ");
 		if (hasStatementNumber())
-			sb.append(getStatementNumber());
+			sb.append(getStatementNumber())
+			  .append(' ');
 		sb.append(tokens.toString());
 		return sb.toString();
 	}

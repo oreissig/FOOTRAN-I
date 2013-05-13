@@ -93,6 +93,7 @@ public enum TokenType {
     FREQUENCY,
     
     // Literals
+    // order is relevant in TokenImpl!
     /** Fixed Point Variable identifier */
     VAR_INT,
     /** Floating Point Variable identifier */
