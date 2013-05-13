@@ -1,13 +1,15 @@
-package footran.reader;
+package footran.lexer;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 
+import footran.reader.Card;
 import footran.reader.CardReader;
-import footran.reader.CardReaderImpl;
+import footran.reader.ReaderMain;
 
-public class ReaderMain {
+public class LexerMain {
 	public static void main(String[] args) throws IOException {
 		if (args.length == 0) {
 			args = new String[3];
@@ -19,14 +21,16 @@ public class ReaderMain {
 		for (String file : args) {
 			System.out.println(file);
 			InputStream in = new FileInputStream(file);
-			CardReader cards = createCardReader(in);
-			while (cards.hasNext())
-				System.out.println(cards.next().toString());
+			CardReader cards = ReaderMain.createCardReader(in);
+			Lexer lex = createLexer(cards);
+			
+			while (lex.hasNext())
+				System.out.println(lex.next().toString());
 			System.out.println();
 		}
 	}
 	
-	public static CardReader createCardReader(InputStream input) {
-		return new CardReaderImpl(input);
+	public static Lexer createLexer(Iterator<Card> cardReader) {
+		return new LexerImpl(cardReader);
 	}
 }
