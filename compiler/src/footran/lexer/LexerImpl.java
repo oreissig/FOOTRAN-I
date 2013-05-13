@@ -18,6 +18,7 @@ class LexerImpl extends StatementHandler {
 	 * will be read as octal
 	 */
 	private boolean octalMode = false;
+	// TODO FORMAT seems to work different
 
 	/**
 	 * Creates a new Lexer based on the given stream of {@link Card}s.
@@ -109,6 +110,7 @@ class LexerImpl extends StatementHandler {
 			 * and only if the value of the function is to be fixed point.
 			 */
 			// "if a subscripted variable has 4 or more characters in its name, the last of these must not be an F"
+			// TODO allow for non-subscripted variables >4 chars to end on F
 			if (ident.length() >= 4 && ident.endsWith("F")) {
 				if (ident.length() > 7)
 					warn("function identifier too long (up to 7 characters allowed)", start);
