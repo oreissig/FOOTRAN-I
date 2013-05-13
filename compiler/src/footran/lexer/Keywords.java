@@ -27,7 +27,7 @@ import com.google.common.collect.Iterators;
  *  TAPE, DRUM,
  *  END, FILE, REWIND, BACKSPACE</tt></li>
  *  <li>Specification Statements:
- *  <tt>DIMENSTION, EQUIVALENCE, FREQUENCY</tt></li>
+ *  <tt>DIMENSION, EQUIVALENCE, FREQUENCY</tt></li>
  * </ul> 
  * @author oreissig
  */
@@ -54,7 +54,7 @@ public class Keywords {
 			    TAPE, DRUM,
 			    END, FILE, REWIND, BACKSPACE,
 			    // Specification Statements
-			    DIMENSTION, EQUIVALENCE, FREQUENCY
+			    DIMENSION, EQUIVALENCE, FREQUENCY
 				);
 		set = Collections.unmodifiableSet(keywords);
 	}

@@ -86,7 +86,7 @@ public enum TokenType {
     
     // Specification Statements
     /** DIMENSION keyword */
-    DIMENSTION,
+    DIMENSION,
     /** EQUIVALENCE keyword */
     EQUIVALENCE,
     /** FREQUENCY keyword */
