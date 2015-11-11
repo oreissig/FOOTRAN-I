@@ -1,0 +1,19 @@
+apply plugin: 'java'
+apply plugin: 'antlr'
+
+// configure code coverage
+apply plugin: 'jacoco'
+jacoco.toolVersion = '0.7.5.+'
+tasks.withType(Test) { it.finalizedBy 'jacocoTestReport' }
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    antlr 'org.antlr:antlr4:4.5.+'
+    compile 'org.antlr:antlr4-runtime:4.5.+'
+    compile 'com.google.guava:guava:18.0'
+    compile 'org.slf4j:slf4j-api:1.7.13'
+    testRuntime 'org.slf4j:slf4j-simple:1.7.13'
+}
