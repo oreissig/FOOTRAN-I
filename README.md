@@ -5,13 +5,6 @@ A modern implementation of a compiler for the very first version of FORTRAN base
 
 This project is licensed under an ISC license, see LICENSE file.
 
-Requirements:
--------------
-- [Google Guava](https://code.google.com/p/guava-libraries/) 14.0
-- [SLF4J](http://www.slf4j.org/) 1.7.5
-
-Those are referenced by the Eclipse projects as user libraries (Preferences -> Java -> Build Path -> User Libraries).
-
 To Do:
 ------
 - `[X]` punched card handling
