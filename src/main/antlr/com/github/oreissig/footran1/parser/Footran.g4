@@ -6,9 +6,11 @@ package com.github.oreissig.footran1.parser;
 
 // parser rules
 
-program : statement*;
-
-statement : expression NEWCARD?;
+program : card*;
+card : STMTNUM? statement NEWCARD?;
+statement : ID
+          // TODO more to come
+          ;
 
 // TODO
 expression : ID;
@@ -27,6 +29,7 @@ CONTINUE : NEWCARD . . . . . ~[' '|'0'] -> skip ;
 // body processing
 ID      : {getCharPositionInLine() > 5}? [A-Z][A-Z0-9]* ;
 NUMBER  : {getCharPositionInLine() > 5}? [0-9]+ ;
+
 // return newlines to parser
 NEWCARD : '\r'? '\n' ;
 // skip spaces and tabs

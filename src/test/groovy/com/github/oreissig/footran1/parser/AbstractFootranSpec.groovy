@@ -14,7 +14,7 @@ abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
     final Class<FootranParser> parserClass = FootranParser
     final Class<FootranLexer> lexerClass = FootranLexer
 
-    ProgramContext parse() {
+    ProgramContext getProgram() {
         parser.program()
     }
 
