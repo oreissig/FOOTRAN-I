@@ -29,23 +29,23 @@ public class ParserSpec extends AbstractFootranSpec {
         
         where:
         src           | num  | body
-        '      ABC'   | null | 'ABC'
-        '      DEF\n' | null | 'DEF'
-        '   23 XYZ'   | '23' | 'XYZ'
+        '      A=B'   | null | 'A=B'
+        '      C=D\n' | null | 'C=D'
+        '   23 X=Y'   | '23' | 'X=Y'
     }
     
     def 'multiple cards are parsed correctly'() {
         given:
         input = '''\
-      ABC
+      A=B
 C     FOO
-      DEF'''
+      C=D'''
         
         expect:
         noParseError()
         cards.size() == 2
-        cards[0].statement().text == 'ABC'
-        cards[1].statement().text == 'DEF'
+        cards[0].statement().text == 'A=B'
+        cards[1].statement().text == 'C=D'
     }
     
     def 'arithmetic formulas are parsed correctly (#src)'(src) {
@@ -54,9 +54,8 @@ C     FOO
         
         expect:
         noParseError()
-        println tokens
         def s = cards[0].statement()
-        println program.text
+        s.text == src
         
         where:
         src << ['A=B']
