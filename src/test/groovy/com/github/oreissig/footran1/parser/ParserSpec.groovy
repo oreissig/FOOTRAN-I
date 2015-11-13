@@ -22,7 +22,7 @@ public class ParserSpec extends AbstractFootranSpec {
         input = src
         
         expect:
-        def cards = program.card()
+        noParseError()
         cards.size() == 1
         cards[0].STMTNUM()?.text == num
         cards[0].statement().text == body
@@ -40,11 +40,11 @@ public class ParserSpec extends AbstractFootranSpec {
       ABC
 C     FOO
       DEF'''
-      
-      expect:
-      def cards = program.card()
-      cards.size() == 2
-      cards[0].statement().text == 'ABC'
-      cards[1].statement().text == 'DEF'
+        
+        expect:
+        noParseError()
+        cards.size() == 2
+        cards[0].statement().text == 'ABC'
+        cards[1].statement().text == 'DEF'
     }
 }
