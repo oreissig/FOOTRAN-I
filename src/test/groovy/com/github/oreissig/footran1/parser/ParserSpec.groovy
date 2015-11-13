@@ -48,17 +48,22 @@ C     FOO
         cards[1].statement().text == 'C=D'
     }
     
-    def 'arithmetic formulas are parsed correctly (#src)'(src) {
+    def 'arithmetic formulas are parsed correctly (#var=#expr)'(var, expr) {
         given:
+        def src = "$var=$expr"
         input = card(src)
         
         expect:
         noParseError()
-        def s = cards[0].statement()
-        s.text == src
+        def af = cards[0].statement().arithmeticFormula()
+        af != null
+        af.ID().text == var
+        af.expression().text == expr
         
         where:
-        src << ['A=B']
+        var   | expr
+        'A'   | 'B'
+        'FO0' | 'B4R'
     }
     
     String card(String body) {
