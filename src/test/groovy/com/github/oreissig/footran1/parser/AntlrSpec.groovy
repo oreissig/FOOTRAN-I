@@ -5,10 +5,13 @@ import groovy.transform.Memoized
 import groovy.transform.TypeCheckingMode
 
 import org.antlr.v4.runtime.ANTLRInputStream
+import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.CharStream
 import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.Lexer
 import org.antlr.v4.runtime.Parser
+import org.antlr.v4.runtime.RecognitionException
+import org.antlr.v4.runtime.Recognizer
 import org.antlr.v4.runtime.Token
 import org.antlr.v4.runtime.TokenStream
 
@@ -38,7 +41,9 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
     }
 
     Lexer getLexer() {
-        lexerClass.newInstance(charStream)
+        def l = lexerClass.newInstance(charStream)
+        l.addErrorListener new NoSyntaxErrorsListener()
+        return l
     }
 
     TokenStream getTokenStream() {
@@ -59,5 +64,18 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
         while (l.nextToken().type != Lexer.EOF)
             t << l.token
         return t
+    }
+    
+    @CompileStatic
+    private static class NoSyntaxErrorsListener extends BaseErrorListener {
+        @Override
+        void syntaxError(Recognizer recognizer,
+                            Object offendingSymbol,
+                            int line,
+                            int charPositionInLine,
+                            String msg,
+                            RecognitionException e) {
+            throw new RuntimeException("$line:$charPositionInLine -> $msg")
+        }
     }
 }
