@@ -1,6 +1,7 @@
 package com.github.oreissig.footran1.parser
 
 import groovy.transform.CompileStatic
+import groovy.transform.Memoized
 import groovy.transform.TypeCheckingMode
 
 import org.antlr.v4.runtime.ANTLRInputStream
@@ -51,6 +52,7 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
         parserClass.newInstance(tokenStream)
     }
 
+    @Memoized
     List<Token> getTokens() {
         def l = lexer
         List<Token> t = []

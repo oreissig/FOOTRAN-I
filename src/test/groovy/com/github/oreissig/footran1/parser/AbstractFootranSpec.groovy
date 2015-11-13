@@ -1,6 +1,7 @@
 package com.github.oreissig.footran1.parser
 
 import groovy.transform.CompileStatic
+import groovy.transform.Memoized
 
 import org.antlr.v4.runtime.tree.ErrorNode
 import org.antlr.v4.runtime.tree.ParseTree
@@ -14,6 +15,7 @@ abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
     final Class<FootranParser> parserClass = FootranParser
     final Class<FootranLexer> lexerClass = FootranLexer
 
+    @Memoized
     ProgramContext getProgram() {
         parser.program()
     }

@@ -22,10 +22,10 @@ public class ParserSpec extends AbstractFootranSpec {
         input = src
         
         expect:
-        program.card().size() == 1
-        CardContext c = program.card().first()
-        c.STMTNUM()?.text == num
-        c.statement().text == body
+        def cards = program.card()
+        cards.size() == 1
+        cards[0].STMTNUM()?.text == num
+        cards[0].statement().text == body
         
         where:
         src           | num  | body
