@@ -35,4 +35,9 @@ abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
             throw new Exception(node.symbol.toString())
         }
     }
+    
+    String card(String body) {
+        assert !('\n' in body)
+        return "      $body"
+    }
 }

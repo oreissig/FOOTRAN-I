@@ -42,7 +42,7 @@ C1234XBARBAZ
     
     def 'numbers are recognized (#num)'(num) {
         given:
-        input = "      $num"
+        input = card(num)
         
         expect:
         tokens.size() == 1
@@ -56,7 +56,7 @@ C1234XBARBAZ
     
     def 'identifiers are recognized (#id)'(id) {
         given:
-        input = "      $id"
+        input = card(id)
         
         expect:
         tokens.size() == 1

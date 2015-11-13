@@ -65,9 +65,4 @@ C     FOO
         'A'   | 'B'
         'FO0' | 'B4R'
     }
-    
-    String card(String body) {
-        assert !body.contains('\n')
-        return "      $body"
-    }
 }
