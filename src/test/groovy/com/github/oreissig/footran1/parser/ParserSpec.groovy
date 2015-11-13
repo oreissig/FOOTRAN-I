@@ -1,9 +1,9 @@
 package com.github.oreissig.footran1.parser
 
-import com.github.oreissig.footran1.parser.FootranParser.CardContext;
-
 import spock.lang.Stepwise
 import spock.lang.Unroll
+
+import com.github.oreissig.footran1.parser.FootranParser.CardContext
 
 @Unroll
 @Stepwise
@@ -46,5 +46,24 @@ C     FOO
         cards.size() == 2
         cards[0].statement().text == 'ABC'
         cards[1].statement().text == 'DEF'
+    }
+    
+    def 'arithmetic formulas are parsed correctly (#src)'(src) {
+        given:
+        input = card(src)
+        
+        expect:
+        noParseError()
+        println tokens
+        def s = cards[0].statement()
+        println program.text
+        
+        where:
+        src << ['A=B']
+    }
+    
+    String card(String body) {
+        assert !body.contains('\n')
+        return "      $body"
     }
 }

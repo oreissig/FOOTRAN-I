@@ -8,9 +8,11 @@ package com.github.oreissig.footran1.parser;
 
 program : card*;
 card : STMTNUM? statement NEWCARD?;
-statement : ID
+statement : arithmeticFormula
           // TODO more to come
           ;
+
+arithmeticFormula : ID '=' expression;
 
 // TODO
 expression : ID;
