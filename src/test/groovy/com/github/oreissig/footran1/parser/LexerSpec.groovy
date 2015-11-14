@@ -9,29 +9,29 @@ import spock.lang.Unroll
 public class LexerSpec extends AbstractFootranSpec {
     
     def 'empty program lexes successfully'() {
-        given:
+        when:
         input = ''
         
-        expect:
+        then:
         tokens.empty
     }
     
     def 'comment lines are ignored'() {
-        given:
+        when:
         input = '''\
 C     FOO
 C1234XBARBAZ
 '''
         
-        expect:
+        then:
         tokens.empty
     }
     
     def 'statement numbers are recognized'(src) {
-        given:
+        when:
         input = src
         
-        expect:
+        then:
         tokens*.type == [STMTNUM]
         
         where:
@@ -41,10 +41,10 @@ C1234XBARBAZ
     }
     
     def 'numbers are recognized (#num)'(num) {
-        given:
+        when:
         input = card(num)
         
-        expect:
+        then:
         tokens.size() == 1
         def t = tokens.first()
         t.type == NUMBER
@@ -55,10 +55,10 @@ C1234XBARBAZ
     }
     
     def 'variable identifiers are recognized (#id)'(id) {
-        given:
+        when:
         input = card(id)
         
-        expect:
+        then:
         tokens.size() == 1
         def t = tokens.first()
         t.type == VAR_ID
@@ -69,10 +69,10 @@ C1234XBARBAZ
     }
     
     def 'function identifier candidates are recognized (#id)'(id) {
-        given:
+        when:
         input = card(id)
         
-        expect:
+        then:
         tokens.size() == 1
         def t = tokens.first()
         t.type == FUNC_CANDIDATE
@@ -83,12 +83,12 @@ C1234XBARBAZ
     }
     
     def 'continuations work'() {
-        given:
+        when:
         input = '''\
       123
      XABC'''
         
-        expect:
+        then:
         tokens*.type == [NUMBER, VAR_ID]
         tokens*.text == ['123', 'ABC']
     }

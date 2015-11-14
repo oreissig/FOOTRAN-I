@@ -11,18 +11,18 @@ import com.github.oreissig.footran1.parser.FootranParser.ExpressionContext
 public class ParserSpec extends AbstractFootranSpec {
     
     def 'empty program parses successfully'() {
-        given:
+        when:
         input = ''
         
-        expect:
+        then:
         program.card().empty
     }
     
     def 'card "#src" is recognized'(src, num, body) {
-        given:
+        when:
         input = src
         
-        expect:
+        then:
         noParseError()
         cards.size() == 1
         cards[0].STMTNUM()?.text == num
@@ -36,13 +36,13 @@ public class ParserSpec extends AbstractFootranSpec {
     }
     
     def 'multiple cards are parsed correctly'() {
-        given:
+        when:
         input = '''\
       A=B
 C     FOO
       C=D'''
         
-        expect:
+        then:
         noParseError()
         cards.size() == 2
         cards[0].statement().text == 'A=B'
@@ -50,12 +50,12 @@ C     FOO
     }
     
     def 'arithmetic formulas are parsed correctly (#var=#expr)'(var, expr) {
-        given:
+        when:
         input = card("$var=$expr")
         
-        expect:
+        then:
         noParseError()
-        def af = cards[0].statement().arithmeticFormula()
+        def af = statement.arithmeticFormula()
         af != null
         def lhs = [af.VAR_ID(), af.FUNC_CANDIDATE(), af.subscript()].find()
         lhs.text == var
@@ -70,17 +70,17 @@ C     FOO
     }
     
     def 'subscript variables are parsed correctly (#var)'(var, dimensions, name, v, c) {
-        given:
+        when:
         input = card("$var=1")
         
-        expect:
+        then:
         noParseError()
-        def s = cards[0].statement().arithmeticFormula().subscript()
+        def s = statement.arithmeticFormula().subscript()
         s.VAR_ID().text == name
         s.subscriptExpression().size() == dimensions
         def exp = s.subscriptExpression()[0]
         exp.VAR_ID()?.text == v
-        exp.intConst()?.text == c
+        exp.uintConst()?.text == c
         
         where:
         var         | dimensions | name  | v    | c
@@ -92,8 +92,10 @@ C     FOO
     
     // TODO incomplete
     def 'expressions can be parsed (#type)'(type, src) {
-        expect:
+        when:
         def exp = parseExpression(src)
+        
+        then:
         exp.text == src
         exp."$type"()
         
@@ -107,6 +109,6 @@ C     FOO
     
     ExpressionContext parseExpression(String src) {
         input = card("A=$src")
-        program.card(0).statement().arithmeticFormula().expression()
+        statement.arithmeticFormula().expression()
     }
 }

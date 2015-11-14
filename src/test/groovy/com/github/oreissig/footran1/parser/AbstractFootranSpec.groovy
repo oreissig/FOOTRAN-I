@@ -2,12 +2,14 @@ package com.github.oreissig.footran1.parser
 
 import groovy.transform.CompileStatic
 import groovy.transform.Memoized
+import groovy.transform.TypeCheckingMode
 
 import org.antlr.v4.runtime.tree.ErrorNode
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 
 import com.github.oreissig.footran1.parser.FootranParser.CardContext
 import com.github.oreissig.footran1.parser.FootranParser.ProgramContext
+import com.github.oreissig.footran1.parser.FootranParser.StatementContext
 
 @CompileStatic
 abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
@@ -22,6 +24,13 @@ abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
 
     List<CardContext> getCards() {
         program.card()
+    }
+
+    // Spock does strange stuff when using CompileStatic
+    @CompileStatic(TypeCheckingMode.SKIP)
+    StatementContext getStatement() {
+        assert cards.size() == 1
+        cards[0].statement()
     }
 
     void noParseError() {
