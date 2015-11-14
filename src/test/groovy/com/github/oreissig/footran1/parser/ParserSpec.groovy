@@ -86,8 +86,8 @@ C     FOO
         var         | dimensions | name  | v    | c
         'A(I)'      | 1          | 'A'   | 'I'  | null
         'BLA(3)'    | 1          | 'BLA' | null | '3'
-        // TODO test failure for more than 3 dimensions
-        'C(1,B,C3)' | 3          | 'C'   | null | '1'
+        'C(1,B)'    | 2          | 'C'   | null | '1'
+        'D(1,B,C3)' | 3          | 'D'   | null | '1'
     }
     
     // subscript expressions = c1 * v +/- c2
