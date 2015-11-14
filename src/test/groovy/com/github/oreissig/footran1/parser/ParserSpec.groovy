@@ -66,7 +66,7 @@ C     FOO
         'A'    | 'B'
         'FO0'  | '4711'
         'A(1)' | '42'   // subscript variable
-        'FOOF' | 'BARF' // function candidate that is a non-subscripted var
+        'FOOF' | 'BAR' // function candidate that is a non-subscripted var
     }
     
     def 'subscript variables are parsed correctly (#var)'(var, dimensions, name, v, c) {
