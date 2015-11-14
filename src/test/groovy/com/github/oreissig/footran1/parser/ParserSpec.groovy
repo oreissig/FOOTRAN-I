@@ -8,7 +8,7 @@ import com.github.oreissig.footran1.parser.FootranParser.ExpressionContext
 
 @Unroll
 @Stepwise
-public class ParserSpec extends AbstractFootranSpec {
+class ParserSpec extends AbstractFootranSpec {
     
     def 'empty program parses successfully'() {
         when:

@@ -6,7 +6,7 @@ import spock.lang.Unroll
 
 @Unroll
 @Stepwise
-public class LexerSpec extends AbstractFootranSpec {
+class LexerSpec extends AbstractFootranSpec {
     
     def 'empty program lexes successfully'() {
         when:
