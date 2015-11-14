@@ -90,6 +90,30 @@ C     FOO
         'C(1,B,C3)' | 3          | 'C'   | null | '1'
     }
     
+    // subscript expressions = c1 * v +/- c2
+    def 'subscript expressions are parsed correctly (#expr)'(expr, c1, v, sign, c2) {
+        when:
+        input = card("A($expr)=1")
+        
+        then:
+        noParseError()
+        def e = statement.arithmeticFormula().subscript().subscriptExpression()[0]
+        def sum = e.subscriptSum()
+        def mul = sum.subscriptMult()
+        mul.uintConst()?.text == c1
+        mul.VAR_ID()?.text == v
+        sum.sign()?.text == sign
+        sum.uintConst()?.text == c2 
+        
+        where:
+        expr     | c1   | v    | sign | c2
+        'MU+2'   | null | 'MU' | '+'  | '2'
+        'MU-2'   | null | 'MU' | '-'  | '2'
+        '5*J'    | '5'  | 'J'  | null | null
+        '5*J+2'  | '5'  | 'J'  | '+'  | '2'
+        '5*J-2'  | '5'  | 'J'  | '-'  | '2'
+    }
+    
     // TODO incomplete
     def 'expressions can be parsed (#type)'(type, src) {
         when:

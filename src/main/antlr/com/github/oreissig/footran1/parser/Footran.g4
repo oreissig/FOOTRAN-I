@@ -30,17 +30,21 @@ statement : arithmeticFormula
 arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
 
 subscript  : VAR_ID '(' subscriptExpression (',' subscriptExpression (',' subscriptExpression)?)? ')';
-subscriptExpression : VAR_ID | intConst | subscriptSum;
-subscriptSum  : subscriptMult ('+'|'-') intConst;
-subscriptMult : (intConst '*')? VAR_ID;
+subscriptExpression : VAR_ID | uintConst | subscriptSum;
+subscriptSum  : subscriptMult (sign uintConst)?;
+subscriptMult : (uintConst '*')? VAR_ID;
 
 expression : VAR_ID | call | intConst | fpConst;
 
 // treat subscripted variables as function calls
 call : FUNC_CANDIDATE '(' expression (',' expression)* ')';
 
-intConst : ('+'|'-')? NUMBER ;
-fpConst  : ('+'|'-')? NUMBER? '.' NUMBER? ('E' intConst)? ;
+uintConst : NUMBER ;
+intConst  : sign? uintConst ;
+ufpConst  : NUMBER? '.' NUMBER? ('E' intConst)? ;
+fpConst   : sign? ufpConst ;
+
+sign : (PLUS|MINUS);
 
 
 // lexer rules
@@ -60,6 +64,9 @@ NUMBER  : DIGIT+ ;
 VAR_ID         : LETTER ALFNUM* {isVariable(getText())}? ;
 // function candidate refers to either a function or a non-subscripted variable
 FUNC_CANDIDATE : LETTER ALFNUM+ {!isVariable(getText())}? ;
+
+PLUS  : '+';
+MINUS : '-';
 
 // return newlines to parser
 NEWCARD : '\r'? '\n' ;
