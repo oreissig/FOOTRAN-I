@@ -54,18 +54,32 @@ C1234XBARBAZ
         num << ['1', '23', '32767']
     }
     
-    def 'identifiers are recognized (#id)'(id) {
+    def 'variable identifiers are recognized (#id)'(id) {
         given:
         input = card(id)
         
         expect:
         tokens.size() == 1
         def t = tokens.first()
-        t.type == ID
+        t.type == VAR_ID
         t.text == id
         
         where:
-        id << ['A', 'I', 'B7', 'SINF', 'XTANF']
+        id << ['I', 'B7', 'JOBNO', 'DELTA', 'WOF']
+    }
+    
+    def 'function identifier candidates are recognized (#id)'(id) {
+        given:
+        input = card(id)
+        
+        expect:
+        tokens.size() == 1
+        def t = tokens.first()
+        t.type == FUNC_CANDIDATE
+        t.text == id
+        
+        where:
+        id << ['SINF', 'XSINF', 'SIN0F']
     }
     
     def 'continuations work'() {
@@ -75,7 +89,7 @@ C1234XBARBAZ
      XABC'''
         
         expect:
-        tokens*.type == [NUMBER, ID]
+        tokens*.type == [NUMBER, VAR_ID]
         tokens*.text == ['123', 'ABC']
     }
 }

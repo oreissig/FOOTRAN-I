@@ -58,7 +58,7 @@ C     FOO
         noParseError()
         def af = cards[0].statement().arithmeticFormula()
         af != null
-        af.ID().text == var
+        af.VAR_ID().text == var
         af.expression().text == expr
         
         where:
@@ -76,11 +76,11 @@ C     FOO
         
         where:
         type       | src
-        'ID'       | 'ABC'
-        'call'     | 'ABC(1,A)'
+        'VAR_ID'   | 'ABC'
+        'call'     | 'ABCF(1,A)'
         'intConst' | '1'
         'fpConst'  | '1.0'
-    } 
+    }
     
     ExpressionContext parseExpression(String src) {
         input = card("A=$src")
