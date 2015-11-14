@@ -10,6 +10,13 @@ import com.github.oreissig.footran1.parser.FootranParser.ExpressionContext
 @Stepwise
 class ParserSpec extends AbstractFootranSpec {
     
+    // fail on stderr
+    def setupSpec() {
+        System.err = Mock(PrintStream) {
+            println(_) >> { throw new Exception(it.toString()) }
+        }
+    }
+    
     def 'empty program parses successfully'() {
         when:
         input = ''
