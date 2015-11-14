@@ -10,8 +10,15 @@ This project is licensed under an ISC license, see LICENSE file.
 
 To Do:
 ------
-- `[X]` punched card handling
-- `[X]` lexer
-- `[.]` parser
-- `[ ]` code generation
+- `[X]` basic punch card handling (comments, continuations, statement numbers)
+- `[X]` parsing of constants, variables and subscripts
+- `[.]` arithmetic formulas and expressions
+- `[ ]` function statements and calls
+- `[ ]` `GO TO` and friends
+- `[ ]` `IF` and friends
+- `[ ]` the `DO` loop
+- `[ ]` input/output statements
+- `[ ]` specification statements
+- `[ ]` interpreter
 - `[ ]` optimizations
+- `[ ]` code generation
