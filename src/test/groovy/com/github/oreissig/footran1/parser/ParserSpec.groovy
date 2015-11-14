@@ -51,23 +51,46 @@ C     FOO
     
     def 'arithmetic formulas are parsed correctly (#var=#expr)'(var, expr) {
         given:
-        def src = "$var=$expr"
-        input = card(src)
+        input = card("$var=$expr")
         
         expect:
         noParseError()
         def af = cards[0].statement().arithmeticFormula()
         af != null
-        af.VAR_ID().text == var
+        def lhs = [af.VAR_ID(), af.FUNC_CANDIDATE(), af.subscript()].find()
+        lhs.text == var
         af.expression().text == expr
         
         where:
-        var   | expr
-        'A'   | 'B'
-        'FO0' | '4711'
-        'BAR' | 'FUNCF(BAZ,1)'
+        var    | expr
+        'A'    | 'B'
+        'FO0'  | '4711'
+        'A(1)' | '42'   // subscript variable
+        'FOOF' | 'BARF' // function candidate that is a non-subscripted var
     }
     
+    def 'subscript variables are parsed correctly (#var)'(var, dimensions, name, v, c) {
+        given:
+        input = card("$var=1")
+        
+        expect:
+        noParseError()
+        def s = cards[0].statement().arithmeticFormula().subscript()
+        s.VAR_ID().text == name
+        s.subscriptExpression().size() == dimensions
+        def exp = s.subscriptExpression()[0]
+        exp.VAR_ID()?.text == v
+        exp.intConst()?.text == c
+        
+        where:
+        var         | dimensions | name  | v    | c
+        'A(I)'      | 1          | 'A'   | 'I'  | null
+        'BLA(3)'    | 1          | 'BLA' | null | '3'
+        // TODO test failure for more than 3 dimensions
+        'C(1,B,C3)' | 3          | 'C'   | null | '1'
+    }
+    
+    // TODO incomplete
     def 'expressions can be parsed (#type)'(type, src) {
         expect:
         def exp = parseExpression(src)

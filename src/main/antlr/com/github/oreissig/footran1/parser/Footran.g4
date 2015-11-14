@@ -27,7 +27,12 @@ statement : arithmeticFormula
           // TODO more to come
           ;
 
-arithmeticFormula : (VAR_ID | FUNC_CANDIDATE) '=' expression;
+arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
+
+subscript  : VAR_ID '(' subscriptExpression (',' subscriptExpression (',' subscriptExpression)?)? ')';
+subscriptExpression : VAR_ID | intConst | subscriptSum;
+subscriptSum  : subscriptMult ('+'|'-') intConst;
+subscriptMult : (intConst '*')? VAR_ID;
 
 expression : VAR_ID | call | intConst | fpConst;
 
