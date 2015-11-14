@@ -14,8 +14,10 @@ statement : arithmeticFormula
 
 arithmeticFormula : ID '=' expression;
 
-// TODO
-expression : ID;
+expression : ID | call | intConst | fpConst;
+
+// treat subscripted variables as function calls
+call : ID '(' expression (',' expression)* ')';
 
 intConst : ('+'|'-')? NUMBER ;
 fpConst  : ('+'|'-')? NUMBER? '.' NUMBER? ('E' intConst)? ;

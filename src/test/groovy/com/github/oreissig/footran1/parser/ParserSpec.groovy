@@ -4,6 +4,7 @@ import spock.lang.Stepwise
 import spock.lang.Unroll
 
 import com.github.oreissig.footran1.parser.FootranParser.CardContext
+import com.github.oreissig.footran1.parser.FootranParser.ExpressionContext
 
 @Unroll
 @Stepwise
@@ -63,6 +64,26 @@ C     FOO
         where:
         var   | expr
         'A'   | 'B'
-        'FO0' | 'B4R'
+        'FO0' | '4711'
+        'BAR' | 'FUNCF(BAZ,1)'
+    }
+    
+    def 'expressions can be parsed (#type)'(type, src) {
+        expect:
+        def exp = parseExpression(src)
+        exp.text == src
+        exp."$type"()
+        
+        where:
+        type       | src
+        'ID'       | 'ABC'
+        'call'     | 'ABC(1,A)'
+        'intConst' | '1'
+        'fpConst'  | '1.0'
+    } 
+    
+    ExpressionContext parseExpression(String src) {
+        input = card("A=$src")
+        program.card(0).statement().arithmeticFormula().expression()
     }
 }
