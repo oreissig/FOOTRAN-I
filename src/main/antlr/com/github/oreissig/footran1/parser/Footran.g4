@@ -31,8 +31,12 @@ STMTNUM : {getCharPositionInLine() < 5}? [0-9]+ ;
 CONTINUE : NEWCARD . . . . . ~[' '|'0'] -> skip ;
 
 // body processing
-ID      : {getCharPositionInLine() > 5}? [A-Z][A-Z0-9]* ;
-NUMBER  : {getCharPositionInLine() > 5}? [0-9]+ ;
+fragment DIGIT  : {getCharPositionInLine() > 5}? [0-9];
+fragment LETTER : {getCharPositionInLine() > 5}? [A-Z];
+fragment ALFNUM : {getCharPositionInLine() > 5}? [A-Z0-9];
+
+ID      : LETTER ALFNUM* ;
+NUMBER  : DIGIT+ ;
 
 // return newlines to parser
 NEWCARD : '\r'? '\n' ;
