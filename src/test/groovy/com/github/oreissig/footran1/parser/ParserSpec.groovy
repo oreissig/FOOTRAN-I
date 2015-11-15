@@ -123,11 +123,11 @@ C     FOO
         then:
         noParseError()
         def s = statement.arithmeticFormula().subscript()
-        s.variable.text == name
+        s.var.text == name
         s.subscriptExpression().size() == dimensions
-        def exp = s.subscriptExpression()[0]
-        exp.variable?.text == v
-        exp.constant?.text == c
+        def e = s.subscriptExpression()[0]
+        e.index?.text == v
+        e.constant?.text == c
         
         where:
         var         | dimensions | name  | v    | c
@@ -145,12 +145,10 @@ C     FOO
         then:
         noParseError()
         def e = statement.arithmeticFormula().subscript().subscriptExpression()[0]
-        def sum = e.sum
-        def mul = sum.product
-        mul.factor?.text == factor
-        mul.index?.text == index
-        sum.sign()?.text == sign
-        sum.summand?.text == summand
+        e.factor?.text == factor
+        e.index?.text == index
+        e.sign()?.text == sign
+        e.summand?.text == summand
         
         where:
         expr     | factor | index | sign | summand
@@ -189,7 +187,7 @@ C     FOO
         
         where:
         src       | member         | name
-        'ABC'     | 'VAR_ID'       | 'variables'
+        'ABC'     | 'variable'     | 'variables'
         'SINF(X)' | 'functionCall' | 'function calls'
         '23'      | 'ufixedConst'  | 'fixed point constants'
         '42.'     | 'ufloatConst'  | 'floating point constants'

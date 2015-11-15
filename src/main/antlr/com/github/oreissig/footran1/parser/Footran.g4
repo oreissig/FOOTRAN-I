@@ -39,13 +39,15 @@ statement : arithmeticFormula
 
 arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
 
-subscript  : variable=VAR_ID '(' subscriptExpression (',' subscriptExpression (',' subscriptExpression)?)? ')';
-subscriptExpression : variable=VAR_ID | constant=ufixedConst | sum=subscriptSum;
-subscriptSum  : product=subscriptMult (sign summand=ufixedConst)?;
-subscriptMult : (factor=ufixedConst '*')? index=VAR_ID;
+variable   : VAR_ID | FUNC_CANDIDATE;
+subscript  : var=VAR_ID '(' subscriptExpression (','
+                            subscriptExpression (','
+                            subscriptExpression )? )? ')';
+subscriptExpression : constant=ufixedConst
+                    | (factor=ufixedConst '*')? index=variable (sign summand=ufixedConst)?;
 
 expression : sign? unsigned=unsignedExpression;
-unsignedExpression : '(' expression ')' | var=VAR_ID | functionCall | ufixedConst | ufloatConst;
+unsignedExpression : '(' expression ')' | variable | functionCall | ufixedConst | ufloatConst;
 
 functionCall : function=FUNC_CANDIDATE '(' expression (',' expression)* ')';
 
