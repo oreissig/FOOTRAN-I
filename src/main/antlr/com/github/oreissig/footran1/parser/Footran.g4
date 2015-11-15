@@ -28,6 +28,7 @@ private boolean isVariable(String text) {
 }
 }
 
+
 // parser rules
 
 program : card*;
@@ -53,7 +54,8 @@ fixedConst  : sign? unsigned=ufixedConst ;
 ufloatConst : integer=NUMBER? '.' (fraction=NUMBER | fractionE=FLOAT_FRAC exponent=fixedConst)? ;
 floatConst  : sign? unsigned=ufloatConst ;
 
-sign : (PLUS|MINUS);
+sign  : (PLUS|MINUS);
+mulOp : (MUL|DIV);
 
 
 // lexer rules
@@ -78,6 +80,9 @@ FUNC_CANDIDATE : LETTER ALFNUM+ {!isVariable(getText())}? ;
 
 PLUS  : '+';
 MINUS : '-';
+MUL   : '*';
+DIV   : '/';
+POWER : '**';
 
 // return newlines to parser
 NEWCARD : '\r'? '\n' ;
