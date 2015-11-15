@@ -76,6 +76,50 @@ C     FOO
         'FOOF' | 'BAR' // function candidate that is a non-subscripted var
     }
     
+    def 'pixed point constants are parsed correctly (#src)'(src, sign, mag) {
+        when:
+        def i = parseExpression(src).intConst()
+        
+        then:
+        i.sign()?.text == sign
+        i.unsigned.NUMBER().text == mag.toString()
+        
+        where:
+        src      | sign | mag
+        '3'      | null | 3
+        '+1'     | '+'  | 1
+        '-28987' | '-'  | 28987
+        '0'      | null | 0
+        '32767'  | null | 32767
+        '-32767' | '-'  | 32767
+    }
+    
+    def 'floating point constants are parsed correctly (#src)'(src, sign, integ, frac, expSign, expMag) {
+        when:
+        def f = parseExpression(src).fpConst()
+        
+        then:
+        f.sign()?.text == sign
+        def uf = f.unsigned
+        uf.integer?.text == integ?.toString()
+        def fraction = [uf.fraction1, uf.fraction2].find()
+        fraction?.text == frac?.toString()
+        def exp = uf.exponent
+        exp?.sign()?.text == expSign
+        exp?.uintConst()?.NUMBER()?.text == expMag?.toString()
+        
+        where:
+        src      | sign | integ | frac   | expSign | expMag
+        '17.'    | null | 17    | null   | null    | null
+        '+5.0'   | '+'  | 5     | 0      | null    | null
+        '-.0003' | '-'  | null  | '0003' | null    | null
+        // to be able to lex the E properly, it is part of the fraction token
+        '5.0E3'  | null | 5     | '0E'   | null    | 3
+        '5.0E+3' | null | 5     | '0E'   | '+'     | 3
+        '5.0E-7' | null | 5     | '0E'   | '-'     | 7
+        '0.0'    | null | 0     | 0      | null    | null
+    }
+    
     def 'subscript variables are parsed correctly (#var)'(var, dimensions, name, v, c) {
         when:
         input = card("$var=1")

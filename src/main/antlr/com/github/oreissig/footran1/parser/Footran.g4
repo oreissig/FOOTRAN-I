@@ -41,7 +41,7 @@ call : FUNC_CANDIDATE '(' expression (',' expression)* ')';
 
 uintConst : NUMBER ;
 intConst  : sign? unsigned=uintConst ;
-ufpConst  : integer=NUMBER? '.' fraction=NUMBER? ('E' exponent=intConst)? ;
+ufpConst  : integer=NUMBER? '.' (fraction1=NUMBER | fraction2=FLOAT_FRAC exponent=intConst)? ;
 fpConst   : sign? unsigned=ufpConst ;
 
 sign : (PLUS|MINUS);
@@ -60,6 +60,8 @@ fragment LETTER : {getCharPositionInLine() > 5}? [A-Z];
 fragment ALFNUM : {getCharPositionInLine() > 5}? [A-Z0-9];
 
 NUMBER  : DIGIT+ ;
+// use a separate token to avoid recognizing the float exponential E as ID
+FLOAT_FRAC : NUMBER 'E';
 
 VAR_ID         : LETTER ALFNUM* {isVariable(getText())}? ;
 // function candidate refers to either a function or a non-subscripted variable
