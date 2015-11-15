@@ -29,7 +29,7 @@ abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
     // Spock does strange stuff when using CompileStatic
     @CompileStatic(TypeCheckingMode.SKIP)
     StatementContext getStatement() {
-        assert cards.size() == 1
+        assert cards*.text.size() == 1
         cards[0].statement()
     }
 
