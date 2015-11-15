@@ -81,6 +81,7 @@ C     FOO
         def i = parseExpression(src).intConst()
         
         then:
+        noParseError()
         i.sign()?.text == sign
         i.unsigned.NUMBER().text == mag.toString()
         
@@ -99,6 +100,7 @@ C     FOO
         def f = parseExpression(src).fpConst()
         
         then:
+        noParseError()
         f.sign()?.text == sign
         def uf = f.unsigned
         uf.integer?.text == integ?.toString()
@@ -171,6 +173,7 @@ C     FOO
         def exp = parseExpression(src)
         
         then:
+        noParseError()
         exp.text == src
         exp."$type"()
         
