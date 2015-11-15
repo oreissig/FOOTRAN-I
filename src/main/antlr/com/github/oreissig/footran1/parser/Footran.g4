@@ -1,3 +1,12 @@
+/* 
+ * A grammar for the original version of FORTRAN as described
+ * by IBM's programmer's reference manual from 1956:
+ * http://www.fortran.com/FortranForTheIBM704.pdf
+ * 
+ * This grammar tries to keep its wording close to the original
+ * language reference, e.g. an array is called subscripted
+ * variable.
+ */
 grammar Footran;
 
 @header {
