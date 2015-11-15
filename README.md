@@ -14,8 +14,8 @@ To Do:
 ------
 - `[X]` basic punch card handling (comments, continuations, statement numbers)
 - `[X]` parsing of constants, variables and subscripts
-- `[.]` arithmetic formulas and expressions
-- `[ ]` function statements and calls
+- `[X]` arithmetic formulas and simple expressions
+- `[ ]` complex arithmetic expressions (`+-*/`)
 - `[ ]` `GO TO` and friends
 - `[ ]` `IF` and friends
 - `[ ]` the `DO` loop
@@ -24,3 +24,7 @@ To Do:
 - `[ ]` interpreter
 - `[ ]` optimizations
 - `[ ]` code generation
+
+Strech goals:
+-------------
+- `[ ]` function statements (have been added in a later revision of the reference)
