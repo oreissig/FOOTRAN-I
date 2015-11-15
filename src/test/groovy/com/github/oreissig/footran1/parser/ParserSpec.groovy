@@ -102,7 +102,7 @@ C     FOO
         f.sign()?.text == sign
         def uf = f.unsigned
         uf.integer?.text == integ?.toString()
-        def fraction = [uf.fraction1, uf.fraction2].find()
+        def fraction = [uf.fraction, uf.fractionE].find()
         fraction?.text == frac?.toString()
         def exp = uf.exponent
         exp?.sign()?.text == expSign

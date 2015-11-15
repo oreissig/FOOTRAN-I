@@ -41,7 +41,7 @@ call : FUNC_CANDIDATE '(' expression (',' expression)* ')';
 
 uintConst : NUMBER ;
 intConst  : sign? unsigned=uintConst ;
-ufpConst  : integer=NUMBER? '.' (fraction1=NUMBER | fraction2=FLOAT_FRAC exponent=intConst)? ;
+ufpConst  : integer=NUMBER? '.' (fraction=NUMBER | fractionE=FLOAT_FRAC exponent=intConst)? ;
 fpConst   : sign? unsigned=ufpConst ;
 
 sign : (PLUS|MINUS);
