@@ -40,9 +40,9 @@ expression : VAR_ID | call | intConst | fpConst;
 call : FUNC_CANDIDATE '(' expression (',' expression)* ')';
 
 uintConst : NUMBER ;
-intConst  : sign? uintConst ;
-ufpConst  : NUMBER? '.' NUMBER? ('E' intConst)? ;
-fpConst   : sign? ufpConst ;
+intConst  : sign? unsigned=uintConst ;
+ufpConst  : integer=NUMBER? '.' fraction=NUMBER? ('E' exponent=intConst)? ;
+fpConst   : sign? unsigned=ufpConst ;
 
 sign : (PLUS|MINUS);
 
