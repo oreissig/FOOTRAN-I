@@ -46,7 +46,7 @@ subscriptMult : (factor=ufixedConst '*')? index=VAR_ID;
 expression : sign? unsigned=unsignedExpression;
 unsignedExpression : '(' expression ')' | var=VAR_ID | functionCall | ufixedConst | ufloatConst;
 
-functionCall : FUNC_CANDIDATE '(' expression (',' expression)* ')';
+functionCall : function=FUNC_CANDIDATE '(' expression (',' expression)* ')';
 
 ufixedConst : NUMBER ;
 fixedConst  : sign? unsigned=ufixedConst ;

@@ -161,6 +161,80 @@ C     FOO
         '5*J-2'  | '5'    | 'J'   | '-'  | '2'
     }
     
+    def 'function calls are parsed correctly (#src)'(src, function, params) {
+        when:
+        def e = parseExpression(src)
+        
+        then:
+        noParseError()
+        def f = e.unsigned.functionCall()
+        f.function.text == function
+        f.expression()*.text == params
+        
+        where:
+        src                     | function | params
+        'FOOF(1)'               | 'FOOF'   | ['1']
+        'BARF(1,2,3,4)'         | 'BARF'   | ['1','2','3','4']
+        'BAZF(ABC,DEF)'         | 'BAZF'   | ['ABC','DEF']
+        'BZRF(BARF(BAZF(FOO)))' | 'BZRF'   | ['BARF(BAZF(FOO))']
+    }
+    
+    def '#name are valid expressions (#src)'(src, member, name) {
+        when:
+        def e = parseExpression(src).unsigned
+        
+        then:
+        noParseError()
+        e."$member"().text == src
+        
+        where:
+        src       | member         | name
+        'ABC'     | 'VAR_ID'       | 'variables'
+        'SINF(X)' | 'functionCall' | 'function calls'
+        '23'      | 'ufixedConst'  | 'fixed point constants'
+        '42.'     | 'ufloatConst'  | 'floating point constants'
+    }
+    
+    def 'expressions can be nested'() {
+        when:
+        def e = parseExpression('(A)')
+        
+        then:
+        noParseError()
+        e.unsigned.expression().text == 'A'
+    }
+    
+    def 'expressions can be signed (#src)'(src, sign) {
+        when:
+        def e = parseExpression(src)
+        
+        then:
+        noParseError()
+        e.sign()?.text == sign
+        e.unsigned.text == 'A'
+        
+        where:
+        src  | sign
+        'A'  | null
+        '+A' | '+'
+        '-A' | '-'
+    }
+    
+    def 'expressions can have at most one sign'() {
+        given:
+        def error
+        onSyntaxError { msg ->
+            error = msg
+        }
+        
+        when:
+        input = card("A=+-B")
+        program
+        
+        then:
+        error == "no viable alternative at input '-'"
+    }
+    
     ExpressionContext parseExpression(String src) {
         input = card("A=$src")
         statement.arithmeticFormula().expression()
