@@ -204,6 +204,25 @@ C     FOO
         e.unsigned.expression().text == 'A'
     }
     
+    def 'non-matching parenthesis are caught ("#src")'(src, msg) {
+        given:
+        def error
+        onSyntaxError { e ->
+            error = e
+        }
+        
+        when:
+        def e = parseExpression(src)
+        
+        then:
+        error.startsWith msg
+        
+        where:
+        src              | msg
+        'FOOF(BARF(1)'   | "missing ')'"
+        'FOOF(BARF(1)))' | "extraneous input ')'"
+    }
+    
     def 'expressions can be signed (#src)'(src, sign) {
         when:
         def e = parseExpression(src)
