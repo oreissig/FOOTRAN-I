@@ -127,11 +127,11 @@ C     FOO
         then:
         noParseError()
         def s = statement.arithmeticFormula().subscript()
-        s.VAR_ID().text == name
+        s.variable.text == name
         s.subscriptExpression().size() == dimensions
         def exp = s.subscriptExpression()[0]
-        exp.VAR_ID()?.text == v
-        exp.uintConst()?.text == c
+        exp.variable?.text == v
+        exp.constant?.text == c
         
         where:
         var         | dimensions | name  | v    | c
@@ -141,28 +141,28 @@ C     FOO
         'D(1,B,C3)' | 3          | 'D'   | null | '1'
     }
     
-    // subscript expressions = c1 * v +/- c2
-    def 'subscript expressions are parsed correctly (#expr)'(expr, c1, v, sign, c2) {
+    // subscript expressions = factor * index +/- summand
+    def 'subscript expressions are parsed correctly (#expr)'(expr, factor, index, sign, summand) {
         when:
         input = card("A($expr)=1")
         
         then:
         noParseError()
         def e = statement.arithmeticFormula().subscript().subscriptExpression()[0]
-        def sum = e.subscriptSum()
-        def mul = sum.subscriptMult()
-        mul.uintConst()?.text == c1
-        mul.VAR_ID()?.text == v
+        def sum = e.sum
+        def mul = sum.product
+        mul.factor?.text == factor
+        mul.index?.text == index
         sum.sign()?.text == sign
-        sum.uintConst()?.text == c2 
+        sum.summand?.text == summand
         
         where:
-        expr     | c1   | v    | sign | c2
-        'MU+2'   | null | 'MU' | '+'  | '2'
-        'MU-2'   | null | 'MU' | '-'  | '2'
-        '5*J'    | '5'  | 'J'  | null | null
-        '5*J+2'  | '5'  | 'J'  | '+'  | '2'
-        '5*J-2'  | '5'  | 'J'  | '-'  | '2'
+        expr     | factor | index | sign | summand
+        'MU+2'   | null   | 'MU'  | '+'  | '2'
+        'MU-2'   | null   | 'MU'  | '-'  | '2'
+        '5*J'    | '5'    | 'J'   | null | null
+        '5*J+2'  | '5'    | 'J'   | '+'  | '2'
+        '5*J-2'  | '5'    | 'J'   | '-'  | '2'
     }
     
     // TODO incomplete

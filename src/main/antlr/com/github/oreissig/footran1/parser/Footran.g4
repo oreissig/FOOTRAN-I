@@ -38,10 +38,10 @@ statement : arithmeticFormula
 
 arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
 
-subscript  : VAR_ID '(' subscriptExpression (',' subscriptExpression (',' subscriptExpression)?)? ')';
-subscriptExpression : VAR_ID | uintConst | subscriptSum;
-subscriptSum  : subscriptMult (sign uintConst)?;
-subscriptMult : (uintConst '*')? VAR_ID;
+subscript  : variable=VAR_ID '(' subscriptExpression (',' subscriptExpression (',' subscriptExpression)?)? ')';
+subscriptExpression : variable=VAR_ID | constant=uintConst | sum=subscriptSum;
+subscriptSum  : product=subscriptMult (sign summand=uintConst)?;
+subscriptMult : (factor=uintConst '*')? index=VAR_ID;
 
 expression : VAR_ID | call | intConst | fpConst;
 
