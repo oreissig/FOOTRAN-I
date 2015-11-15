@@ -4,6 +4,7 @@ import groovy.transform.CompileStatic
 import groovy.transform.Memoized
 import groovy.transform.TypeCheckingMode
 
+import org.antlr.v4.runtime.ANTLRErrorListener
 import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.CharStream
@@ -19,6 +20,10 @@ import spock.lang.Specification
 
 @CompileStatic
 abstract class AntlrSpec<P extends Parser> extends Specification {
+    
+    protected Closure onError = { String msg -> throw new RuntimeException(msg) }
+    protected ANTLRErrorListener errorListener = new NoSyntaxErrorsListener()
+    
     /**
      * @return Lexer class to instantiate
      */
@@ -41,8 +46,8 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
     }
 
     Lexer getLexer() {
-        def l = lexerClass.newInstance(charStream)
-        l.addErrorListener new NoSyntaxErrorsListener()
+        Lexer l = lexerClass.newInstance(charStream)
+        l.addErrorListener errorListener
         return l
     }
 
@@ -54,7 +59,9 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
      * @return fully initialized parser
      */
     P getParser() {
-        parserClass.newInstance(tokenStream)
+        Parser p = parserClass.newInstance(tokenStream)
+        p.addErrorListener errorListener
+        return p
     }
 
     @Memoized
@@ -67,7 +74,7 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
     }
     
     @CompileStatic
-    private static class NoSyntaxErrorsListener extends BaseErrorListener {
+    private class NoSyntaxErrorsListener extends BaseErrorListener {
         @Override
         void syntaxError(Recognizer recognizer,
                             Object offendingSymbol,
@@ -75,7 +82,11 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
                             int charPositionInLine,
                             String msg,
                             RecognitionException e) {
-            throw new RuntimeException("$line:$charPositionInLine -> $msg")
+            onError.call(msg)
         }
+    }
+    
+    void onSyntaxError(Closure action) {
+        onError = action
     }
 }
