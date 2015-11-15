@@ -78,12 +78,13 @@ C     FOO
     
     def 'pixed point constants are parsed correctly (#src)'(src, sign, mag) {
         when:
-        def i = parseExpression(src).intConst()
+        def e = parseExpression(src)
         
         then:
         noParseError()
-        i.sign()?.text == sign
-        i.unsigned.NUMBER().text == mag.toString()
+        e.sign()?.text == sign
+        def i = e.unsigned.ufixedConst()
+        i.NUMBER().text == mag.toString()
         
         where:
         src      | sign | mag
@@ -97,18 +98,18 @@ C     FOO
     
     def 'floating point constants are parsed correctly (#src)'(src, sign, integ, frac, expSign, expMag) {
         when:
-        def f = parseExpression(src).fpConst()
+        def e = parseExpression(src)
         
         then:
         noParseError()
-        f.sign()?.text == sign
-        def uf = f.unsigned
+        e.sign()?.text == sign
+        def uf = e.unsigned.ufloatConst()
         uf.integer?.text == integ?.toString()
         def fraction = [uf.fraction, uf.fractionE].find()
         fraction?.text == frac?.toString()
         def exp = uf.exponent
         exp?.sign()?.text == expSign
-        exp?.uintConst()?.NUMBER()?.text == expMag?.toString()
+        exp?.unsigned?.NUMBER()?.text == expMag?.toString()
         
         where:
         src      | sign | integ | frac   | expSign | expMag
@@ -165,24 +166,6 @@ C     FOO
         '5*J'    | '5'    | 'J'   | null | null
         '5*J+2'  | '5'    | 'J'   | '+'  | '2'
         '5*J-2'  | '5'    | 'J'   | '-'  | '2'
-    }
-    
-    // TODO incomplete
-    def 'expressions can be parsed (#type)'(type, src) {
-        when:
-        def exp = parseExpression(src)
-        
-        then:
-        noParseError()
-        exp.text == src
-        exp."$type"()
-        
-        where:
-        type       | src
-        'VAR_ID'   | 'ABC'
-        'call'     | 'ABCF(1,A)'
-        'intConst' | '1'
-        'fpConst'  | '1.0'
     }
     
     ExpressionContext parseExpression(String src) {

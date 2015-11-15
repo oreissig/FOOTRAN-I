@@ -39,19 +39,19 @@ statement : arithmeticFormula
 arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
 
 subscript  : variable=VAR_ID '(' subscriptExpression (',' subscriptExpression (',' subscriptExpression)?)? ')';
-subscriptExpression : variable=VAR_ID | constant=uintConst | sum=subscriptSum;
-subscriptSum  : product=subscriptMult (sign summand=uintConst)?;
-subscriptMult : (factor=uintConst '*')? index=VAR_ID;
+subscriptExpression : variable=VAR_ID | constant=ufixedConst | sum=subscriptSum;
+subscriptSum  : product=subscriptMult (sign summand=ufixedConst)?;
+subscriptMult : (factor=ufixedConst '*')? index=VAR_ID;
 
-expression : VAR_ID | call | intConst | fpConst;
+expression : sign? unsigned=unsignedExpression;
+unsignedExpression : '(' expression ')' | var=VAR_ID | functionCall | ufixedConst | ufloatConst;
 
-// treat subscripted variables as function calls
-call : FUNC_CANDIDATE '(' expression (',' expression)* ')';
+functionCall : FUNC_CANDIDATE '(' expression (',' expression)* ')';
 
-uintConst : NUMBER ;
-intConst  : sign? unsigned=uintConst ;
-ufpConst  : integer=NUMBER? '.' (fraction=NUMBER | fractionE=FLOAT_FRAC exponent=intConst)? ;
-fpConst   : sign? unsigned=ufpConst ;
+ufixedConst : NUMBER ;
+fixedConst  : sign? unsigned=ufixedConst ;
+ufloatConst : integer=NUMBER? '.' (fraction=NUMBER | fractionE=FLOAT_FRAC exponent=fixedConst)? ;
+floatConst  : sign? unsigned=ufloatConst ;
 
 sign : (PLUS|MINUS);
 
@@ -59,8 +59,8 @@ sign : (PLUS|MINUS);
 // lexer rules
 
 // prefix area processing
-COMMENT : {getCharPositionInLine() == 0}? 'C' ~('\n')* '\n'? -> skip ;
-STMTNUM : {getCharPositionInLine() < 5}? [0-9]+ ;
+COMMENT  : {getCharPositionInLine() == 0}? 'C' ~('\n')* '\n'? -> skip ;
+STMTNUM  : {getCharPositionInLine() < 5}? [0-9]+ ;
 CONTINUE : NEWCARD . . . . . ~[' '|'0'] -> skip ;
 
 // body processing
