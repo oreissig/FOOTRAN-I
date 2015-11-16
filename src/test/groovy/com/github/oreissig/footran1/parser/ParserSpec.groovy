@@ -260,7 +260,7 @@ C     FOO
         then:
         noParseError()
         def goTo = statement.uncondGoto()
-        goTo.ufixedConst().text == num.toString()
+        goTo.statementNumber().text == num.toString()
         
         where:
         num << [1, 23, 32767]
@@ -274,7 +274,7 @@ C     FOO
         noParseError()
         def goTo = statement.assignedGoto()
         goTo.variable().text == 'N'
-        goTo.ufixedConst()*.text == ['7','12','19']
+        goTo.statementNumber()*.text == ['7','12','19']
     }
     
     def 'assign statement can be parsed'() {
@@ -284,7 +284,7 @@ C     FOO
         then:
         noParseError()
         def a = statement.assign()
-        a.ufixedConst().text == '12'
+        a.statementNumber().text == '12'
         a.variable().text == 'N'
     }
     
@@ -295,7 +295,7 @@ C     FOO
         then:
         noParseError()
         def goTo = statement.computedGoto()
-        goTo.ufixedConst()*.text == ['30','40','50','60']
+        goTo.statementNumber()*.text == ['30','40','50','60']
         goTo.variable().text == 'I'
     }
     

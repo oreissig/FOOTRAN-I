@@ -58,26 +58,26 @@ statement : arithmeticFormula
 
 arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
 
-uncondGoto   : 'GO' 'TO' ufixedConst;
-assignedGoto : 'GO' 'TO' variable ',' '(' ufixedConst (',' ufixedConst)* ')';
-assign       : 'ASSIGN' ufixedConst 'TO' variable;
-computedGoto : 'GO' 'TO' '(' ufixedConst (',' ufixedConst)* ')' ',' variable;
+uncondGoto   : 'GO' 'TO' statementNumber;
+assignedGoto : 'GO' 'TO' variable ',' '(' statementNumber (',' statementNumber)* ')';
+assign       : 'ASSIGN' statementNumber 'TO' variable;
+computedGoto : 'GO' 'TO' '(' statementNumber (',' statementNumber)* ')' ',' variable;
 
-ifStatement           : 'IF' '(' condition=expression ')' lessThan=ufixedConst ','
-                        equal=ufixedConst ',' greaterThan=ufixedConst;
+ifStatement           : 'IF' '(' condition=expression ')' lessThan=statementNumber ','
+                        equal=statementNumber ',' greaterThan=statementNumber;
 senseLight            : 'SENSE' 'LIGHT' light=ufixedConst;
 ifSenseLight          : 'IF' '(' 'SENSE' 'LIGHT' light=ufixedConst ')'
-                        on=ufixedConst ',' off=ufixedConst;
+                        on=statementNumber ',' off=statementNumber;
 ifSenseSwitch         : 'IF' '(' 'SENSE' 'SWITCH' senseSwitch=ufixedConst ')'
-                        down=ufixedConst ',' up=ufixedConst;
+                        down=statementNumber ',' up=statementNumber;
 ifAccumulatorOverflow : 'IF' 'ACCUMULATOR' 'OVERFLOW'
-                        on=ufixedConst ',' off=ufixedConst;
+                        on=statementNumber ',' off=statementNumber;
 ifQuotientOverflow    : 'IF' 'QUOTIENT' 'OVERFLOW'
-                        on=ufixedConst ',' off=ufixedConst;
+                        on=statementNumber ',' off=statementNumber;
 ifDivideCheck         : 'IF' 'DIVIDE' 'CHECK'
-                        on=ufixedConst ',' off=ufixedConst;
+                        on=statementNumber ',' off=statementNumber;
 
-doLoop       : 'DO' range=ufixedConst index=variable '=' first=loopBoundary ','
+doLoop       : 'DO' range=statementNumber index=variable '=' first=loopBoundary ','
                last=loopBoundary (',' step=loopBoundary)?;
 loopBoundary : ufixedConst|variable;
 continueStmt : 'CONTINUE';
@@ -90,6 +90,8 @@ subscript  : var=VAR_ID '(' subscriptExpression (','
                             subscriptExpression )? )? ')';
 subscriptExpression : constant=ufixedConst
                     | (factor=ufixedConst '*')? index=variable (sign summand=ufixedConst)?;
+// equal to ufixedConst, but nice to separate semantically
+statementNumber     : NUMBER;
 
 expression : sign? unsigned=unsignedExpression;
 unsignedExpression : '(' expression ')' | variable | subscript | functionCall | ufixedConst | ufloatConst;
