@@ -188,6 +188,7 @@ C     FOO
         where:
         src       | member         | name
         'ABC'     | 'variable'     | 'variables'
+        'A(X)'    | 'subscript'    | 'subscripts'
         'SINF(X)' | 'functionCall' | 'function calls'
         '23'      | 'ufixedConst'  | 'fixed point constants'
         '42.'     | 'ufloatConst'  | 'floating point constants'

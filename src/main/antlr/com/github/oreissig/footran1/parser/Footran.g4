@@ -57,7 +57,7 @@ subscriptExpression : constant=ufixedConst
                     | (factor=ufixedConst '*')? index=variable (sign summand=ufixedConst)?;
 
 expression : sign? unsigned=unsignedExpression;
-unsignedExpression : '(' expression ')' | variable | functionCall | ufixedConst | ufloatConst;
+unsignedExpression : '(' expression ')' | variable | subscript | functionCall | ufixedConst | ufloatConst;
 
 functionCall : function=FUNC_CANDIDATE '(' expression (',' expression)* ')';
 
