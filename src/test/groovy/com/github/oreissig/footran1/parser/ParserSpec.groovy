@@ -100,9 +100,8 @@ C     FOO
         uf.integer?.text == integ?.toString()
         def fraction = [uf.fraction, uf.fractionE].find()
         fraction?.text == frac?.toString()
-        def exp = uf.exponent
-        exp?.sign()?.text == expSign
-        exp?.unsigned?.NUMBER()?.text == expMag?.toString()
+        uf.expSign?.text == expSign
+        uf.exponent?.NUMBER()?.text == expMag?.toString()
         
         where:
         src      | sign | integ | frac   | expSign | expMag

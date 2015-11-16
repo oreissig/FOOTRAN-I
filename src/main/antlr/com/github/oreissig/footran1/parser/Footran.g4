@@ -112,9 +112,8 @@ unsignedExpression : '(' expression ')' | variable | subscript | functionCall | 
 functionCall : function=FUNC_CANDIDATE '(' expression (',' expression)* ')';
 
 ufixedConst : NUMBER ;
-fixedConst  : sign? unsigned=ufixedConst ;
-ufloatConst : integer=NUMBER? '.' (fraction=NUMBER | fractionE=FLOAT_FRAC exponent=fixedConst)? ;
-floatConst  : sign? unsigned=ufloatConst ;
+ufloatConst : integer=NUMBER? '.' (fraction=NUMBER
+              | fractionE=FLOAT_FRAC expSign=sign? exponent=ufixedConst)? ;
 
 sign  : (PLUS|MINUS);
 mulOp : (MUL|DIV);
