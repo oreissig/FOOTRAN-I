@@ -440,18 +440,20 @@ C     FOO
     
     def 'equivalence statement can be parsed'() {
         when:
-        input = card('EQUIVALENCE (A,B(1),C(5)), (D(17),E(3))')
+        input = card('EQUIVALENCE (A,B(1),C(5)), (D(17),E(3)), (FOOF,BARF)')
         
         then:
         noParseError()
         def groups = statement.equivalence().group()
-        groups.size() == 2
+        groups.size() == 3
         def g1 = groups[0].quantity()
         g1*.VAR_ID()*.text == ['A','B','C']
         g1*.location*.text == [null,'1','5']
         def g2 = groups[1].quantity()
         g2*.VAR_ID()*.text == ['D','E']
         g2*.location*.text == ['17','3']
+        def g3 = groups[2].quantity()
+        g3*.FUNC_CANDIDATE()*.text == ['FOOF', 'BARF']
     }
     
     def 'frequency statement can be parsed'() {
