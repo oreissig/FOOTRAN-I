@@ -299,6 +299,85 @@ C     FOO
         goTo.variable().text == 'I'
     }
     
+    def 'if statements can be parsed (#src)'(src, cond, lt, eq, gt) {
+        when:
+        input = card(src)
+        
+        then:
+        noParseError()
+        def i = statement.ifStatement()
+        i.condition.text == cond
+        i.lessThan.text == lt.toString()
+        i.equal.text == eq.toString()
+        i.greaterThan.text == gt.toString()
+        
+        where:
+        src                   | cond     | lt | eq | gt
+        'IF(3) 1,2,3'         | '3'      | 1  | 2  | 3
+        'IF(I) 1,23,32767'    | 'I'      | 1  | 23 | 32767
+        'IF(A(J,K)) 10,20,30' | 'A(J,K)' | 10 | 20 | 30
+    }
+    
+    def 'sense light statements can be parsed (#i)'(i) {
+        when:
+        input = card("SENSE LIGHT $i")
+        
+        then:
+        noParseError()
+        def s = statement.senseLight()
+        s.light.text == i.toString()
+        
+        where:
+        i << (0..4).asList()
+    }
+    
+    def 'if sense light statements can be parsed (#i)'(i) {
+        when:
+        input = card("IF (SENSE LIGHT $i) 30, 40")
+        
+        then:
+        noParseError()
+        def isl = statement.ifSenseLight()
+        isl.light.text == i.toString()
+        isl.on.text == '30'
+        isl.off.text == '40'
+        
+        where:
+        i << (1..4).asList()
+    }
+    
+    def 'if sense switch statements can be parsed (#i)'(i) {
+        when:
+        input = card("IF (SENSE SWITCH $i) 30, 40")
+        
+        then:
+        noParseError()
+        def iss = statement.ifSenseSwitch()
+        iss.senseSwitch.text == i.toString()
+        iss.down.text == '30'
+        iss.up.text == '40'
+        
+        where:
+        i << (1..6).asList()
+    }
+    
+    def 'if #flag can be parsed'(flag, rule) {
+        when:
+        input = card("IF ${flag.toUpperCase()} 30, 40")
+        
+        then:
+        noParseError()
+        def i = statement."$rule"()
+        i.on.text == '30'
+        i.off.text == '40'
+        
+        where:
+        flag                   | rule
+        'accumulator overflow' | 'ifAccumulatorOverflow'
+        'quotient overflow'    | 'ifQuotientOverflow'
+        'divide check'         | 'ifDivideCheck'
+    }
+    
     ExpressionContext parseExpression(String src) {
         input = card("A=$src")
         statement.arithmeticFormula().expression()

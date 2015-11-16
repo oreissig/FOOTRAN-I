@@ -39,6 +39,14 @@ statement : arithmeticFormula
           | assignedGoto
           | assign
           | computedGoto
+          // IF family
+          | ifStatement
+          | senseLight
+          | ifSenseLight
+          | ifSenseSwitch
+          | ifAccumulatorOverflow
+          | ifQuotientOverflow
+          | ifDivideCheck
           // TODO more to come
           ;
 
@@ -48,6 +56,20 @@ uncondGoto   : 'GO' 'TO' ufixedConst;
 assignedGoto : 'GO' 'TO' variable ',' '(' ufixedConst (',' ufixedConst)* ')';
 assign       : 'ASSIGN' ufixedConst 'TO' variable;
 computedGoto : 'GO' 'TO' '(' ufixedConst (',' ufixedConst)* ')' ',' variable;
+
+ifStatement           : 'IF' '(' condition=expression ')' lessThan=ufixedConst ','
+                        equal=ufixedConst ',' greaterThan=ufixedConst;
+senseLight            : 'SENSE' 'LIGHT' light=ufixedConst;
+ifSenseLight          : 'IF' '(' 'SENSE' 'LIGHT' light=ufixedConst ')'
+                        on=ufixedConst ',' off=ufixedConst;
+ifSenseSwitch         : 'IF' '(' 'SENSE' 'SWITCH' senseSwitch=ufixedConst ')'
+                        down=ufixedConst ',' up=ufixedConst;
+ifAccumulatorOverflow : 'IF' 'ACCUMULATOR' 'OVERFLOW'
+                        on=ufixedConst ',' off=ufixedConst;
+ifQuotientOverflow    : 'IF' 'QUOTIENT' 'OVERFLOW'
+                        on=ufixedConst ',' off=ufixedConst;
+ifDivideCheck         : 'IF' 'DIVIDE' 'CHECK'
+                        on=ufixedConst ',' off=ufixedConst;
 
 variable   : VAR_ID | FUNC_CANDIDATE;
 subscript  : var=VAR_ID '(' subscriptExpression (','

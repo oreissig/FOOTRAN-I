@@ -17,7 +17,7 @@ To Do:
 - `[X]` arithmetic formulas and simple expressions
 - `[ ]` complex arithmetic expressions (`+-*/`)
 - `[X]` `GO TO` and friends
-- `[ ]` `IF` and friends
+- `[X]` `IF` and friends
 - `[ ]` the `DO` loop
 - `[ ]` input/output statements
 - `[ ]` specification statements
