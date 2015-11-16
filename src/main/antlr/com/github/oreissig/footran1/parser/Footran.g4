@@ -34,10 +34,20 @@ private boolean isVariable(String text) {
 program : card*;
 card : STMTNUM? statement NEWCARD?;
 statement : arithmeticFormula
+          // GO TO family
+          | uncondGoto
+          | assignedGoto
+          | assign
+          | computedGoto
           // TODO more to come
           ;
 
 arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
+
+uncondGoto   : 'GO' 'TO' ufixedConst;
+assignedGoto : 'GO' 'TO' variable ',' '(' ufixedConst (',' ufixedConst)* ')';
+assign       : 'ASSIGN' ufixedConst 'TO' variable;
+computedGoto : 'GO' 'TO' '(' ufixedConst (',' ufixedConst)* ')' ',' variable;
 
 variable   : VAR_ID | FUNC_CANDIDATE;
 subscript  : var=VAR_ID '(' subscriptExpression (','
@@ -64,7 +74,7 @@ mulOp : (MUL|DIV);
 
 // prefix area processing
 COMMENT  : {getCharPositionInLine() == 0}? 'C' ~('\n')* '\n'? -> skip ;
-STMTNUM  : {getCharPositionInLine() < 5}? [0-9]+ ;
+STMTNUM  : {getCharPositionInLine() < 5}? [1-9][0-9]* ;
 CONTINUE : NEWCARD . . . . . ~[' '|'0'] -> skip ;
 
 // body processing

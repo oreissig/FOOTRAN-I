@@ -252,6 +252,52 @@ C     FOO
         error == "no viable alternative at input '-'"
     }
     
+    def 'unconditional goto can be parsed (#num)'(num) {
+        when:
+        input = card("GO TO $num")
+        
+        then:
+        noParseError()
+        def goTo = statement.uncondGoto()
+        goTo.ufixedConst().text == num.toString()
+        
+        where:
+        num << [1, 23, 32767]
+    }
+    
+    def 'assigned goto can be parsed'() {
+        when:
+        input = card('GO TO N, (7,12,19)')
+        
+        then:
+        noParseError()
+        def goTo = statement.assignedGoto()
+        goTo.variable().text == 'N'
+        goTo.ufixedConst()*.text == ['7','12','19']
+    }
+    
+    def 'assign statement can be parsed'() {
+        when:
+        input = card('ASSIGN 12 TO N')
+        
+        then:
+        noParseError()
+        def a = statement.assign()
+        a.ufixedConst().text == '12'
+        a.variable().text == 'N'
+    }
+    
+    def 'computed goto can be parsed'() {
+        when:
+        input = card('GO TO (30,40,50,60), I')
+        
+        then:
+        noParseError()
+        def goTo = statement.computedGoto()
+        goTo.ufixedConst()*.text == ['30','40','50','60']
+        goTo.variable().text == 'I'
+    }
+    
     ExpressionContext parseExpression(String src) {
         input = card("A=$src")
         statement.arithmeticFormula().expression()
