@@ -426,6 +426,49 @@ C     FOO
         src << ['PAUSE', 'STOP']
     }
     
+    def 'dimension statement can be parsed'() {
+        when:
+        input = card('DIMENSION A(10),B(5,15),C(3,4,5)')
+        
+        then:
+        noParseError()
+        def allocs = statement.dimension().allocation()
+        allocs*.var*.text == ['A','B','C']
+        allocs[0].ufixedConst()*.text == ['10']
+        allocs[1].ufixedConst()*.text == ['5','15']
+        allocs[2].ufixedConst()*.text == ['3','4','5']
+    }
+    
+    def 'equivalence statement can be parsed'() {
+        when:
+        input = card('EQUIVALENCE (A,B(1),C(5)), (D(17),E(3))')
+        
+        then:
+        noParseError()
+        def groups = statement.equivalence().group()
+        groups.size() == 2
+        def g1 = groups[0].quantity()
+        g1*.VAR_ID()*.text == ['A','B','C']
+        g1*.location*.text == [null,'1','5']
+        def g2 = groups[1].quantity()
+        g2*.VAR_ID()*.text == ['D','E']
+        g2*.location*.text == ['17','3']
+    }
+    
+    def 'frequency statement can be parsed'() {
+        when:
+        input = card('FREQUENCY 30(1,2,1), 40(11), 50(1,7,1,1)')
+        
+        then:
+        noParseError()
+        def est = statement.frequency().estimate()
+        est.size() == 3
+        est*.statementNumber()*.text == ['30','40','50']
+        est[0].ufixedConst()*.text == ['1','2','1']
+        est[1].ufixedConst()*.text == ['11']
+        est[2].ufixedConst()*.text == ['1','7','1','1']
+    }
+    
     ExpressionContext parseExpression(String src) {
         input = card("A=$src")
         statement.arithmeticFormula().expression()

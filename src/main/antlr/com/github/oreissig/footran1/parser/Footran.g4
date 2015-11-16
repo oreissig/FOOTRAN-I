@@ -53,7 +53,10 @@ statement : arithmeticFormula
           | pause
           | stop
           // TODO I/O
-          // TODO specifications
+          // specifications
+          | dimension
+          | equivalence
+          | frequency
           ;
 
 arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
@@ -83,6 +86,16 @@ loopBoundary : ufixedConst|variable;
 continueStmt : 'CONTINUE';
 pause        : 'PAUSE' consoleOutput=ufixedConst?;
 stop         : 'STOP'  consoleOutput=ufixedConst?;
+
+// TODO I/O rules
+
+dimension   : 'DIMENSION' allocation (',' allocation)*;
+allocation  : var=VAR_ID '(' ufixedConst (',' ufixedConst (',' ufixedConst)? )? ')';
+equivalence : 'EQUIVALENCE' group (',' group)*;
+group     : '(' quantity (',' quantity)+ ')';
+quantity    : FUNC_CANDIDATE | VAR_ID ('(' location=ufixedConst ')')?;
+frequency   : 'FREQUENCY' estimate (',' estimate)*;
+estimate    : statementNumber '(' ufixedConst (',' ufixedConst)* ')';
 
 variable   : VAR_ID | FUNC_CANDIDATE;
 subscript  : var=VAR_ID '(' subscriptExpression (','

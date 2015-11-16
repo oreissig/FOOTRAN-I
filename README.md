@@ -18,7 +18,7 @@ To Do:
 - `[ ]` complex arithmetic expressions (`+-*/`)
 - `[X]` control statements
 - `[ ]` input/output statements
-- `[ ]` specification statements
+- `[X]` specification statements
 - `[ ]` interpreter
 - `[ ]` optimizations
 - `[ ]` code generation
