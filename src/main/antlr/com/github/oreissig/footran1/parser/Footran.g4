@@ -52,7 +52,8 @@ statement : arithmeticFormula
           | continueStmt
           | pause
           | stop
-          // TODO more to come
+          // TODO I/O
+          // TODO specifications
           ;
 
 arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
