@@ -16,9 +16,7 @@ To Do:
 - `[X]` parsing of constants, variables and subscripts
 - `[X]` arithmetic formulas and simple expressions
 - `[ ]` complex arithmetic expressions (`+-*/`)
-- `[X]` `GO TO` and friends
-- `[X]` `IF` and friends
-- `[ ]` the `DO` loop
+- `[X]` control statements
 - `[ ]` input/output statements
 - `[ ]` specification statements
 - `[ ]` interpreter

@@ -47,6 +47,11 @@ statement : arithmeticFormula
           | ifAccumulatorOverflow
           | ifQuotientOverflow
           | ifDivideCheck
+          // DO loop & misc control flow
+          | doLoop
+          | continueStmt
+          | pause
+          | stop
           // TODO more to come
           ;
 
@@ -70,6 +75,13 @@ ifQuotientOverflow    : 'IF' 'QUOTIENT' 'OVERFLOW'
                         on=ufixedConst ',' off=ufixedConst;
 ifDivideCheck         : 'IF' 'DIVIDE' 'CHECK'
                         on=ufixedConst ',' off=ufixedConst;
+
+doLoop       : 'DO' range=ufixedConst index=variable '=' first=loopBoundary ','
+               last=loopBoundary (',' step=loopBoundary)?;
+loopBoundary : ufixedConst|variable;
+continueStmt : 'CONTINUE';
+pause        : 'PAUSE' consoleOutput=ufixedConst?;
+stop         : 'STOP'  consoleOutput=ufixedConst?;
 
 variable   : VAR_ID | FUNC_CANDIDATE;
 subscript  : var=VAR_ID '(' subscriptExpression (','

@@ -378,6 +378,54 @@ C     FOO
         'divide check'         | 'ifDivideCheck'
     }
     
+    def 'do loop can be parsed (#first,#last,#step)'(src,first,last,step) {
+        when:
+        input = card(src)
+        
+        then:
+        noParseError()
+        def d = statement.doLoop()
+        d.range.text == '30'
+        d.index.text == 'I'
+        d.first.text == first
+        d.last.text == last
+        d.step?.text == step
+        
+        where:
+        src             | first | last | step
+        'DO 30 I=1,10'  | '1'   | '10' | null
+        'DO 30 I=1,M,3' | '1'   | 'M'  | '3'
+        'DO 30 I=A,2,C' | 'A'   | '2'  | 'C'
+    }
+    
+    def '#src statements can be parsed'(src, rule) {
+        when:
+        input = card(src)
+        
+        then:
+        noParseError()
+        statement."$rule"().text == src
+        
+        where:
+        src        | rule
+        'CONTINUE' | 'continueStmt'
+        'PAUSE'    | 'pause'
+        'STOP'     | 'stop'
+    }
+    
+    def '#src statement may state a return code'(src) {
+        when:
+        input = card("$src 77777")
+        
+        then:
+        noParseError()
+        def rule = src.toLowerCase()
+        statement."$rule"().consoleOutput.text == '77777'
+        
+        where:
+        src << ['PAUSE', 'STOP']
+    }
+    
     ExpressionContext parseExpression(String src) {
         input = card("A=$src")
         statement.arithmeticFormula().expression()
