@@ -1,8 +1,8 @@
 package com.github.oreissig.footran1.parser
 
+import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovy.transform.Memoized
-import groovy.transform.TypeCheckingMode
 
 import org.antlr.v4.runtime.ANTLRErrorListener
 import org.antlr.v4.runtime.ANTLRInputStream
@@ -40,7 +40,7 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
      */
     def input
 
-    @CompileStatic(TypeCheckingMode.SKIP)
+    @CompileDynamic
     CharStream getCharStream() {
         new ANTLRInputStream(input)
     }

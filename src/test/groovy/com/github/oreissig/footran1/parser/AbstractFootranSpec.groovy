@@ -1,8 +1,8 @@
 package com.github.oreissig.footran1.parser
 
+import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovy.transform.Memoized
-import groovy.transform.TypeCheckingMode
 
 import org.antlr.v4.runtime.tree.ErrorNode
 import org.antlr.v4.runtime.tree.ParseTreeWalker
@@ -27,7 +27,7 @@ abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
     }
 
     // Spock does strange stuff when using CompileStatic
-    @CompileStatic(TypeCheckingMode.SKIP)
+    @CompileDynamic
     StatementContext getStatement() {
         assert cards*.text.size() == 1
         cards[0].statement()
