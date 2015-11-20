@@ -31,6 +31,7 @@ private boolean isVariable(String text) {
 
 // parser rules
 
+// http://www.fortran.com/FortranForTheIBM704.pdf#9
 program : card*;
 card : STMTNUM? statement NEWCARD?;
 statement : arithmeticFormula
@@ -59,13 +60,16 @@ statement : arithmeticFormula
           | frequency
           ;
 
+// http://www.fortran.com/FortranForTheIBM704.pdf#18
 arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
 
+// http://www.fortran.com/FortranForTheIBM704.pdf#19
 uncondGoto   : 'GO' 'TO' statementNumber;
 assignedGoto : 'GO' 'TO' variable ',' '(' statementNumber (',' statementNumber)* ')';
 assign       : 'ASSIGN' statementNumber 'TO' variable;
 computedGoto : 'GO' 'TO' '(' statementNumber (',' statementNumber)* ')' ',' variable;
 
+// http://www.fortran.com/FortranForTheIBM704.pdf#20
 ifStatement           : 'IF' '(' condition=expression ')' lessThan=statementNumber ','
                         equal=statementNumber ',' greaterThan=statementNumber;
 senseLight            : 'SENSE' 'LIGHT' light=ufixedConst;
@@ -73,6 +77,7 @@ ifSenseLight          : 'IF' '(' 'SENSE' 'LIGHT' light=ufixedConst ')'
                         on=statementNumber ',' off=statementNumber;
 ifSenseSwitch         : 'IF' '(' 'SENSE' 'SWITCH' senseSwitch=ufixedConst ')'
                         down=statementNumber ',' up=statementNumber;
+// http://www.fortran.com/FortranForTheIBM704.pdf#21
 ifAccumulatorOverflow : 'IF' 'ACCUMULATOR' 'OVERFLOW'
                         on=statementNumber ',' off=statementNumber;
 ifQuotientOverflow    : 'IF' 'QUOTIENT' 'OVERFLOW'
@@ -80,24 +85,33 @@ ifQuotientOverflow    : 'IF' 'QUOTIENT' 'OVERFLOW'
 ifDivideCheck         : 'IF' 'DIVIDE' 'CHECK'
                         on=statementNumber ',' off=statementNumber;
 
+// http://www.fortran.com/FortranForTheIBM704.pdf#22
 doLoop       : 'DO' range=statementNumber index=variable '=' first=loopBoundary ','
                last=loopBoundary (',' step=loopBoundary)?;
 loopBoundary : ufixedConst|variable;
+// http://www.fortran.com/FortranForTheIBM704.pdf#24
 continueStmt : 'CONTINUE';
+// http://www.fortran.com/FortranForTheIBM704.pdf#21
 pause        : 'PAUSE' consoleOutput=ufixedConst?;
 stop         : 'STOP'  consoleOutput=ufixedConst?;
 
 // TODO I/O rules
+// http://www.fortran.com/FortranForTheIBM704.pdf#26
 
+// http://www.fortran.com/FortranForTheIBM704.pdf#37
 dimension   : 'DIMENSION' allocation (',' allocation)*;
 allocation  : var=VAR_ID '(' ufixedConst (',' ufixedConst (',' ufixedConst)? )? ')';
+// http://www.fortran.com/FortranForTheIBM704.pdf#38
 equivalence : 'EQUIVALENCE' group (',' group)*;
 group     : '(' quantity (',' quantity)+ ')';
 quantity    : FUNC_CANDIDATE | VAR_ID ('(' location=ufixedConst ')')?;
+// http://www.fortran.com/FortranForTheIBM704.pdf#39
 frequency   : 'FREQUENCY' estimate (',' estimate)*;
 estimate    : statementNumber '(' ufixedConst (',' ufixedConst)* ')';
 
+// http://www.fortran.com/FortranForTheIBM704.pdf#12
 variable   : VAR_ID | FUNC_CANDIDATE;
+// http://www.fortran.com/FortranForTheIBM704.pdf#13
 subscript  : var=VAR_ID '(' subscriptExpression (','
                             subscriptExpression (','
                             subscriptExpression )? )? ')';
@@ -106,11 +120,15 @@ subscriptExpression : constant=ufixedConst
 // equal to ufixedConst, but nice to separate semantically
 statementNumber     : NUMBER;
 
+// TODO incomplete
+// http://www.fortran.com/FortranForTheIBM704.pdf#16
 expression : sign? unsigned=unsignedExpression;
 unsignedExpression : '(' expression ')' | variable | subscript | functionCall | ufixedConst | ufloatConst;
 
+// http://www.fortran.com/FortranForTheIBM704.pdf#14
 functionCall : function=FUNC_CANDIDATE '(' expression (',' expression)* ')';
 
+// http://www.fortran.com/FortranForTheIBM704.pdf#11
 ufixedConst : NUMBER ;
 ufloatConst : integer=NUMBER? '.' (fraction=NUMBER
               | fractionE=FLOAT_FRAC expSign=sign? exponent=ufixedConst)? ;
@@ -122,8 +140,10 @@ mulOp : (MUL|DIV);
 // lexer rules
 
 // prefix area processing
+// http://www.fortran.com/FortranForTheIBM704.pdf#10
 COMMENT  : {getCharPositionInLine() == 0}? 'C' ~('\n')* '\n'? -> skip ;
 STMTNUM  : {getCharPositionInLine() < 5}? [1-9][0-9]* ;
+// http://www.fortran.com/FortranForTheIBM704.pdf#9
 CONTINUE : NEWCARD . . . . . ~[' '|'0'] -> skip ;
 
 // body processing
