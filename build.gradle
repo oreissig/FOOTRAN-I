@@ -1,6 +1,11 @@
 apply plugin: 'groovy'
 apply plugin: 'antlr'
 
+// use invokedynamic for groovy because it's so cool
+tasks.withType(GroovyCompile) {
+    groovyOptions.optimizationOptions.indy = true
+}
+
 // configure code coverage
 apply plugin: 'jacoco'
 jacoco.toolVersion = '0.7.5.+'
