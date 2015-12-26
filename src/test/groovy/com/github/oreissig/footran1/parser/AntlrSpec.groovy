@@ -4,7 +4,6 @@ import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
 import groovy.transform.Memoized
 
-import org.antlr.v4.runtime.ANTLRErrorListener
 import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.CharStream
@@ -21,8 +20,7 @@ import spock.lang.Specification
 @CompileStatic
 abstract class AntlrSpec<P extends Parser> extends Specification {
     
-    protected Closure onError = { String msg -> throw new RuntimeException(msg) }
-    protected ANTLRErrorListener errorListener = new NoSyntaxErrorsListener()
+    protected String syntaxError
     
     /**
      * @return Lexer class to instantiate
@@ -47,7 +45,7 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
 
     Lexer getLexer() {
         Lexer l = lexerClass.newInstance(charStream)
-        l.addErrorListener errorListener
+        l.addErrorListener new NoSyntaxErrorsListener()
         return l
     }
 
@@ -60,7 +58,7 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
      */
     P getParser() {
         Parser p = parserClass.newInstance(tokenStream)
-        p.addErrorListener errorListener
+        p.addErrorListener new NoSyntaxErrorsListener()
         return p
     }
 
@@ -82,11 +80,7 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
                             int charPositionInLine,
                             String msg,
                             RecognitionException e) {
-            onError.call(msg)
+            syntaxError = msg
         }
-    }
-    
-    void onSyntaxError(Closure action) {
-        onError = action
     }
 }

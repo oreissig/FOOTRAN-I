@@ -203,17 +203,11 @@ C     FOO
     }
     
     def 'non-matching parenthesis are caught ("#src")'(src, msg) {
-        given:
-        def error
-        onSyntaxError { e ->
-            error = e
-        }
-        
         when:
         def e = parseExpression(src)
         
         then:
-        error.startsWith msg
+        syntaxError.startsWith msg
         
         where:
         src              | msg
@@ -238,18 +232,12 @@ C     FOO
     }
     
     def 'expressions can have at most one sign'() {
-        given:
-        def error
-        onSyntaxError { msg ->
-            error = msg
-        }
-        
         when:
         input = card("A=+-B")
         program
         
         then:
-        error == "no viable alternative at input '-'"
+        syntaxError == "no viable alternative at input '-'"
     }
     
     def 'unconditional goto can be parsed (#num)'(num) {

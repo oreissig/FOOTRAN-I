@@ -35,6 +35,7 @@ abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
 
     void noParseError() {
         ParseTreeWalker.DEFAULT.walk(new NoErrorListener(), program)
+        assert syntaxError == null
     }
 
     @CompileStatic
