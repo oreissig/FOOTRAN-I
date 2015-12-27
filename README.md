@@ -15,7 +15,7 @@ To Do:
 - `[X]` basic punch card handling (comments, continuations, statement numbers)
 - `[X]` parsing of constants, variables and subscripts
 - `[X]` arithmetic formulas and simple expressions
-- `[ ]` complex arithmetic expressions (`+-*/`)
+- `[X]` complex arithmetic expressions (`+-*/`)
 - `[X]` control statements
 - `[ ]` input/output statements
 - `[X]` specification statements
