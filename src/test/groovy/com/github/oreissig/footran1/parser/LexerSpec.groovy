@@ -4,6 +4,8 @@ import static com.github.oreissig.footran1.parser.FootranLexer.*
 import spock.lang.Stepwise
 import spock.lang.Unroll
 
+import com.github.oreissig.footran1.AbstractFootranSpec
+
 @Unroll
 @Stepwise
 class LexerSpec extends AbstractFootranSpec {

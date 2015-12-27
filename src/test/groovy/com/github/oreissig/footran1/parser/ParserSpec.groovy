@@ -3,8 +3,8 @@ package com.github.oreissig.footran1.parser
 import spock.lang.Stepwise
 import spock.lang.Unroll
 
-import com.github.oreissig.footran1.parser.AntlrSpec.SyntaxError
-import com.github.oreissig.footran1.parser.FootranParser.CardContext
+import com.github.oreissig.footran1.AbstractFootranSpec
+import com.github.oreissig.footran1.AntlrSpec.SyntaxError
 
 @Unroll
 @Stepwise

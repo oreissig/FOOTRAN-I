@@ -1,4 +1,4 @@
-package com.github.oreissig.footran1.parser
+package com.github.oreissig.footran1
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic

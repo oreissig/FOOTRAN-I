@@ -1,4 +1,4 @@
-package com.github.oreissig.footran1.parser
+package com.github.oreissig.footran1
 
 import groovy.transform.CompileDynamic
 import groovy.transform.CompileStatic
@@ -7,6 +7,9 @@ import groovy.transform.Memoized
 import org.antlr.v4.runtime.tree.ErrorNode
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 
+import com.github.oreissig.footran1.parser.FootranBaseListener
+import com.github.oreissig.footran1.parser.FootranLexer
+import com.github.oreissig.footran1.parser.FootranParser
 import com.github.oreissig.footran1.parser.FootranParser.CardContext
 import com.github.oreissig.footran1.parser.FootranParser.ExpressionContext
 import com.github.oreissig.footran1.parser.FootranParser.ProgramContext
