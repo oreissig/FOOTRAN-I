@@ -3,6 +3,7 @@ package com.github.oreissig.footran1.parser
 import spock.lang.Stepwise
 import spock.lang.Unroll
 
+import com.github.oreissig.footran1.parser.AntlrSpec.SyntaxError
 import com.github.oreissig.footran1.parser.FootranParser.CardContext
 import com.github.oreissig.footran1.parser.FootranParser.ExpressionContext
 
@@ -204,10 +205,11 @@ C     FOO
     
     def 'non-matching parenthesis are caught ("#src")'(src, msg) {
         when:
-        def e = parseExpression(src)
+        parseExpression(src)
         
         then:
-        syntaxError.startsWith msg
+        SyntaxError e = thrown()
+        e.msg.startsWith msg
         
         where:
         src              | msg
@@ -237,7 +239,8 @@ C     FOO
         program
         
         then:
-        syntaxError == "no viable alternative at input '-'"
+        SyntaxError e = thrown()
+        e.msg == "no viable alternative at input '-'"
     }
     
     def 'unconditional goto can be parsed (#num)'(num) {

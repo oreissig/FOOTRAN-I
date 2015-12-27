@@ -20,8 +20,6 @@ import spock.lang.Specification
 @CompileStatic
 abstract class AntlrSpec<P extends Parser> extends Specification {
     
-    protected String syntaxError
-    
     /**
      * @return Lexer class to instantiate
      */
@@ -80,7 +78,27 @@ abstract class AntlrSpec<P extends Parser> extends Specification {
                             int charPositionInLine,
                             String msg,
                             RecognitionException e) {
-            syntaxError = msg
+            throw new SyntaxError(offendingSymbol, line, charPositionInLine, msg, e)
+        }
+    }
+    
+    @CompileStatic
+    static class SyntaxError extends RuntimeException {
+        final Object offendingSymbol
+        final int line
+        final int charPositionInLine
+        final String msg
+        
+        SyntaxError(Object offendingSymbol,
+                    int line,
+                    int charPositionInLine,
+                    String msg,
+                    RecognitionException e) {
+            super("syntax error at $line:$charPositionInLine for $offendingSymbol: $msg", e)
+            this.offendingSymbol = offendingSymbol
+            this.line = line
+            this.charPositionInLine = charPositionInLine
+            this.msg = msg
         }
     }
 }

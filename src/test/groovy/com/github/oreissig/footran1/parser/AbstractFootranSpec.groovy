@@ -35,14 +35,23 @@ abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
 
     void noParseError() {
         ParseTreeWalker.DEFAULT.walk(new NoErrorListener(), program)
-        assert syntaxError == null
     }
 
     @CompileStatic
     private static class NoErrorListener extends FootranBaseListener {
         @Override
         void visitErrorNode(ErrorNode node) {
-            throw new Exception(node.symbol.toString())
+            throw new ParseError(node)
+        }
+    }
+    
+    @CompileStatic
+    static class ParseError extends RuntimeException {
+        final ErrorNode node
+        
+        ParseError(ErrorNode node) {
+            super(node.symbol.toString())
+            this.node = node
         }
     }
     
