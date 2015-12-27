@@ -242,7 +242,7 @@ C     FOO
         e.msg == "no viable alternative at input '-'"
     }
     
-    def 'additive operations are parsed correctly (#src)'(src,ops,summands) {
+    def 'additive operations are parsed correctly (#src)'(src,op,summands) {
         when:
         def e = parseExpression(src)
         
@@ -250,19 +250,19 @@ C     FOO
         noParseError()
         def sum = e.sum()
         sum.sum()*.text == summands
-        sum.sign()*.text == ops
+        sum.sign().text == op
         !sum.product()
         
         where:
-        src     | ops   | summands
-        'A+3'   | ['+'] | ['A','3']
-        'B-4'   | ['-'] | ['B','4']
-        '+A+3'  | ['+'] | ['A','3']
-        'A+B+C' | ['+'] | ['A+B','C']
-        '1-2+3' | ['+'] | ['1-2','3']
+        src     | op  | summands
+        'A+3'   | '+' | ['A','3']
+        'B-4'   | '-' | ['B','4']
+        '+A+3'  | '+' | ['A','3']
+        'A+B+C' | '+' | ['A+B','C']
+        '1-2+3' | '+' | ['1-2','3']
     }
     
-    def 'multiplicative operations are parsed correctly (#src)'(src,ops,factors) {
+    def 'multiplicative operations are parsed correctly (#src)'(src,op,factors) {
         when:
         def e = parseExpression(src)
         
@@ -270,16 +270,16 @@ C     FOO
         noParseError()
         def product = e.sum().product()
         product.product()*.text == factors
-        product.mulOp()*.text == ops
+        product.mulOp().text == op
         !product.power()
         
         where:
-        src     | ops           | factors
-        'A*3'   | ['*'] | ['A','3']
-        'B/4'   | ['/'] | ['B','4']
-        '+A*3'  | ['*'] | ['A','3']
-        'A*B*C' | ['*'] | ['A*B','C']
-        '1/2*3' | ['*'] | ['1/2','3']
+        src     | op  | factors
+        'A*3'   | '*' | ['A','3']
+        'B/4'   | '/' | ['B','4']
+        '+A*3'  | '*' | ['A','3']
+        'A*B*C' | '*' | ['A*B','C']
+        '1/2*3' | '*' | ['1/2','3']
     }
     
     def 'exponential operations are parsed correctly (A ** B)'() {
