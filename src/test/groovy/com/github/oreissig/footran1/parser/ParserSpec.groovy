@@ -5,7 +5,6 @@ import spock.lang.Unroll
 
 import com.github.oreissig.footran1.parser.AntlrSpec.SyntaxError
 import com.github.oreissig.footran1.parser.FootranParser.CardContext
-import com.github.oreissig.footran1.parser.FootranParser.ExpressionContext
 
 @Unroll
 @Stepwise
@@ -77,7 +76,7 @@ C     FOO
         then:
         noParseError()
         e.sign()?.text == sign
-        def i = e.unsigned.ufixedConst()
+        def i = unary(e).ufixedConst()
         i.NUMBER().text == mag.toString()
         
         where:
@@ -97,7 +96,7 @@ C     FOO
         then:
         noParseError()
         e.sign()?.text == sign
-        def uf = e.unsigned.ufloatConst()
+        def uf = unary(e).ufloatConst()
         uf.integer?.text == integ?.toString()
         def fraction = [uf.fraction, uf.fractionE].find()
         fraction?.text == frac?.toString()
@@ -165,7 +164,7 @@ C     FOO
         
         then:
         noParseError()
-        def f = e.unsigned.functionCall()
+        def f = unary(e).functionCall()
         f.function.text == function
         f.expression()*.text == params
         
@@ -179,11 +178,11 @@ C     FOO
     
     def '#name are valid expressions (#src)'(src, member, name) {
         when:
-        def e = parseExpression(src).unsigned
+        def e = parseExpression(src)
         
         then:
         noParseError()
-        e."$member"().text == src
+        unary(e)."$member"().text == src
         
         where:
         src       | member         | name
@@ -200,7 +199,7 @@ C     FOO
         
         then:
         noParseError()
-        e.unsigned.expression().text == 'A'
+        unary(e).expression().text == 'A'
     }
     
     def 'non-matching parenthesis are caught ("#src")'(src, msg) {
@@ -213,7 +212,7 @@ C     FOO
         
         where:
         src              | msg
-        // TODO 'FOOF(BARF(1)'   | "missing ')'"
+        'FOOF(BARF(1)'   | "missing ')'"
         'FOOF(BARF(1)))' | "extraneous input ')'"
     }
     
@@ -224,7 +223,7 @@ C     FOO
         then:
         noParseError()
         e.sign()?.text == sign
-        e.unsigned.text == 'A'
+        unary(e).text == 'A'
         
         where:
         src  | sign
@@ -250,37 +249,37 @@ C     FOO
         then:
         noParseError()
         def sum = e.sum()
+        sum.sum()*.text == summands
         sum.sign()*.text == ops
-        sum.unsignedExpression()*.text == summands
         !sum.product()
         
         where:
-        src       | ops           | summands
-        'A+3'     | ['+']         | ['A','3']
-        'B-4'     | ['-']         | ['B','4']
-        'A+B+C+D' | ['+','+','+'] | ['A','B','C','D']
-        '1-2-3-4' | ['-','-','-'] | ['1','2','3','4']
-        'A+B-C'   | ['+','-']     | ['A','B','C']
+        src     | ops   | summands
+        'A+3'   | ['+'] | ['A','3']
+        'B-4'   | ['-'] | ['B','4']
+        '+A+3'  | ['+'] | ['A','3']
+        'A+B+C' | ['+'] | ['A+B','C']
+        '1-2+3' | ['+'] | ['1-2','3']
     }
     
-    def 'multiplicative operations are parsed correctly (#src)'(src,ops,summands) {
+    def 'multiplicative operations are parsed correctly (#src)'(src,ops,factors) {
         when:
         def e = parseExpression(src)
         
         then:
         noParseError()
         def product = e.sum().product()
+        product.product()*.text == factors
         product.mulOp()*.text == ops
-        product.unsignedExpression()*.text == summands
         !product.power()
         
         where:
-        src       | ops           | summands
-        'A*3'     | ['*']         | ['A','3']
-        'B/4'     | ['/']         | ['B','4']
-        'A*B*C*D' | ['*','*','*'] | ['A','B','C','D']
-        '1/2/3/4' | ['/','/','/'] | ['1','2','3','4']
-        'A*B/C'   | ['*','/']     | ['A','B','C']
+        src     | ops           | factors
+        'A*3'   | ['*'] | ['A','3']
+        'B/4'   | ['/'] | ['B','4']
+        '+A*3'  | ['*'] | ['A','3']
+        'A*B*C' | ['*'] | ['A*B','C']
+        '1/2*3' | ['*'] | ['1/2','3']
     }
     
     def 'exponential operations are parsed correctly (A ** B)'() {
@@ -290,7 +289,41 @@ C     FOO
         then:
         noParseError()
         def power = e.sum().product().power()
-        power.unsignedExpression()*.text == ['A','B']
+        power.unaryExpression()*.text == ['A','B']
+    }
+    
+    def 'Hierarchy of operations is correct'() {
+        when:
+        def root = parseExpression('A+B/C+D**E*F-G').sum()
+        
+        then:
+        /*
+         * A+B/C+D**E*F-G
+         * -----a------|b
+         * -c---|----d-
+         * e|-f- -g--|h
+         *   i|j k|-l
+         */
+        def a = root.sum(0)
+        def b = root.sum(1)
+        def c = a.sum(0)
+        def d = a.sum(1).product()
+        def e = c.sum(0)
+        def f = c.sum(1).product()
+        def g = d.product(0).power()
+        def h = d.product(1)
+        def i = f.product(0)
+        def j = f.product(1)
+        def k = g.unaryExpression(0)
+        def l = g.unaryExpression(1)
+        
+        [e,i,j,k,l,h,b]*.text == 'ABCDEFG'.split('')
+        root.sign().MINUS()
+        a.sign().PLUS()
+        c.sign().PLUS()
+        d.mulOp().MUL()
+        f.mulOp().DIV()
+        g.POWER()
     }
     
     def 'unconditional goto can be parsed (#num)'(num) {
@@ -509,10 +542,5 @@ C     FOO
         est[0].ufixedConst()*.text == ['1','2','1']
         est[1].ufixedConst()*.text == ['11']
         est[2].ufixedConst()*.text == ['1','7','1','1']
-    }
-    
-    ExpressionContext parseExpression(String src) {
-        input = card("A=$src")
-        statement.arithmeticFormula().expression()
     }
 }

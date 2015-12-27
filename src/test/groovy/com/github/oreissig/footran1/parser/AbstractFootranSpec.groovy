@@ -8,8 +8,10 @@ import org.antlr.v4.runtime.tree.ErrorNode
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 
 import com.github.oreissig.footran1.parser.FootranParser.CardContext
+import com.github.oreissig.footran1.parser.FootranParser.ExpressionContext
 import com.github.oreissig.footran1.parser.FootranParser.ProgramContext
 import com.github.oreissig.footran1.parser.FootranParser.StatementContext
+import com.github.oreissig.footran1.parser.FootranParser.UnaryExpressionContext
 
 @CompileStatic
 abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
@@ -58,5 +60,22 @@ abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
     String card(String body) {
         assert !('\n' in body)
         return "      $body"
+    }
+    
+    ExpressionContext parseExpression(String src) {
+        input = card("A=$src")
+        statement.arithmeticFormula().expression()
+    }
+    
+    // workaround for strange compile error
+    @CompileDynamic
+    UnaryExpressionContext unary(ExpressionContext expr) {
+        def sum = expr.sum()
+        assert !sum.sign()
+        def prod = sum.product()
+        assert !prod.mulOp()
+        def pow = prod.power()
+        assert !pow.POWER()
+        return pow.unaryExpression().first()
     }
 }

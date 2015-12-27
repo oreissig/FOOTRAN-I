@@ -128,14 +128,14 @@ subscriptExpression : constant=ufixedConst
 
 
 // http://www.fortran.com/FortranForTheIBM704.pdf#16
-expression : sign? unsigned=unsignedExpression
-           | sum;
-unsignedExpression : variable | subscript | functionCall | ufixedConst | ufloatConst
-                   | '(' expression ')';
-power   : unsignedExpression POWER unsignedExpression;
-product : power   | unsignedExpression (mulOp unsignedExpression)+;
-sum     : product | unsignedExpression (sign  unsignedExpression)+;
-
+expression : sign? sum;
+sum        : sum sumOp=sign sum
+           | product;
+product    : product mulOp product
+           | power;
+power      : unaryExpression (POWER unaryExpression)?;
+unaryExpression : variable | subscript | functionCall | ufixedConst | ufloatConst
+                | '(' expression ')';
 
 // http://www.fortran.com/FortranForTheIBM704.pdf#14
 functionCall : function=FUNC_CANDIDATE '(' expression (',' expression)* ')';
