@@ -213,7 +213,7 @@ C     FOO
         
         where:
         src              | msg
-        'FOOF(BARF(1)'   | "missing ')'"
+        // TODO 'FOOF(BARF(1)'   | "missing ')'"
         'FOOF(BARF(1)))' | "extraneous input ')'"
     }
     
@@ -241,6 +241,56 @@ C     FOO
         then:
         SyntaxError e = thrown()
         e.msg == "no viable alternative at input '-'"
+    }
+    
+    def 'additive operations are parsed correctly (#src)'(src,ops,summands) {
+        when:
+        def e = parseExpression(src)
+        
+        then:
+        noParseError()
+        def sum = e.sum()
+        sum.sign()*.text == ops
+        sum.unsignedExpression()*.text == summands
+        !sum.product()
+        
+        where:
+        src       | ops           | summands
+        'A+3'     | ['+']         | ['A','3']
+        'B-4'     | ['-']         | ['B','4']
+        'A+B+C+D' | ['+','+','+'] | ['A','B','C','D']
+        '1-2-3-4' | ['-','-','-'] | ['1','2','3','4']
+        'A+B-C'   | ['+','-']     | ['A','B','C']
+    }
+    
+    def 'multiplicative operations are parsed correctly (#src)'(src,ops,summands) {
+        when:
+        def e = parseExpression(src)
+        
+        then:
+        noParseError()
+        def product = e.sum().product()
+        product.mulOp()*.text == ops
+        product.unsignedExpression()*.text == summands
+        !product.power()
+        
+        where:
+        src       | ops           | summands
+        'A*3'     | ['*']         | ['A','3']
+        'B/4'     | ['/']         | ['B','4']
+        'A*B*C*D' | ['*','*','*'] | ['A','B','C','D']
+        '1/2/3/4' | ['/','/','/'] | ['1','2','3','4']
+        'A*B/C'   | ['*','/']     | ['A','B','C']
+    }
+    
+    def 'exponential operations are parsed correctly (A ** B)'() {
+        when:
+        def e = parseExpression("A**B")
+        
+        then:
+        noParseError()
+        def power = e.sum().product().power()
+        power.unsignedExpression()*.text == ['A','B']
     }
     
     def 'unconditional goto can be parsed (#num)'(num) {

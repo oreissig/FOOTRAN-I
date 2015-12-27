@@ -127,10 +127,14 @@ subscriptExpression : constant=ufixedConst
                     | (factor=ufixedConst '*')? index=variable (sign summand=ufixedConst)?;
 
 
-// TODO incomplete
 // http://www.fortran.com/FortranForTheIBM704.pdf#16
-expression : sign? unsigned=unsignedExpression;
-unsignedExpression : '(' expression ')' | variable | subscript | functionCall | ufixedConst | ufloatConst;
+expression : sign? unsigned=unsignedExpression
+           | sum;
+unsignedExpression : variable | subscript | functionCall | ufixedConst | ufloatConst
+                   | '(' expression ')';
+power   : unsignedExpression POWER unsignedExpression;
+product : power   | unsignedExpression (mulOp unsignedExpression)+;
+sum     : product | unsignedExpression (sign  unsignedExpression)+;
 
 
 // http://www.fortran.com/FortranForTheIBM704.pdf#14
