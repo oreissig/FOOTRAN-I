@@ -63,11 +63,13 @@ statement : arithmeticFormula
 // http://www.fortran.com/FortranForTheIBM704.pdf#18
 arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
 
+
 // http://www.fortran.com/FortranForTheIBM704.pdf#19
 uncondGoto   : 'GO' 'TO' statementNumber;
 assignedGoto : 'GO' 'TO' variable ',' '(' statementNumber (',' statementNumber)* ')';
 assign       : 'ASSIGN' statementNumber 'TO' variable;
 computedGoto : 'GO' 'TO' '(' statementNumber (',' statementNumber)* ')' ',' variable;
+
 
 // http://www.fortran.com/FortranForTheIBM704.pdf#20
 ifStatement           : 'IF' '(' condition=expression ')' lessThan=statementNumber ','
@@ -84,6 +86,9 @@ ifQuotientOverflow    : 'IF' 'QUOTIENT' 'OVERFLOW'
                         on=statementNumber ',' off=statementNumber;
 ifDivideCheck         : 'IF' 'DIVIDE' 'CHECK'
                         on=statementNumber ',' off=statementNumber;
+// equal to ufixedConst, but nice to separate semantically
+statementNumber : NUMBER;
+
 
 // http://www.fortran.com/FortranForTheIBM704.pdf#22
 doLoop       : 'DO' range=statementNumber index=variable '=' first=loopBoundary ','
@@ -95,8 +100,10 @@ continueStmt : 'CONTINUE';
 pause        : 'PAUSE' consoleOutput=ufixedConst?;
 stop         : 'STOP'  consoleOutput=ufixedConst?;
 
+
 // TODO I/O rules
 // http://www.fortran.com/FortranForTheIBM704.pdf#26
+
 
 // http://www.fortran.com/FortranForTheIBM704.pdf#37
 dimension   : 'DIMENSION' allocation (',' allocation)*;
@@ -109,6 +116,7 @@ quantity    : FUNC_CANDIDATE | VAR_ID ('(' location=ufixedConst ')')?;
 frequency   : 'FREQUENCY' estimate (',' estimate)*;
 estimate    : statementNumber '(' ufixedConst (',' ufixedConst)* ')';
 
+
 // http://www.fortran.com/FortranForTheIBM704.pdf#12
 variable   : VAR_ID | FUNC_CANDIDATE;
 // http://www.fortran.com/FortranForTheIBM704.pdf#13
@@ -117,13 +125,13 @@ subscript  : var=VAR_ID '(' subscriptExpression (','
                             subscriptExpression )? )? ')';
 subscriptExpression : constant=ufixedConst
                     | (factor=ufixedConst '*')? index=variable (sign summand=ufixedConst)?;
-// equal to ufixedConst, but nice to separate semantically
-statementNumber     : NUMBER;
+
 
 // TODO incomplete
 // http://www.fortran.com/FortranForTheIBM704.pdf#16
 expression : sign? unsigned=unsignedExpression;
 unsignedExpression : '(' expression ')' | variable | subscript | functionCall | ufixedConst | ufloatConst;
+
 
 // http://www.fortran.com/FortranForTheIBM704.pdf#14
 functionCall : function=FUNC_CANDIDATE '(' expression (',' expression)* ')';
