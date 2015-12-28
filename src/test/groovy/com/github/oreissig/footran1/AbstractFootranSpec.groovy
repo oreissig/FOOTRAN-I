@@ -65,9 +65,17 @@ abstract class AbstractFootranSpec extends AntlrSpec<FootranParser>
         return "      $body"
     }
     
-    ExpressionContext parseExpression(String src) {
-        input = card("A=$src")
+    String expression(String expr) {
+        card("A=$expr")
+    }
+    
+    ExpressionContext getExpression() {
         statement.arithmeticFormula().expression()
+    }
+    
+    ExpressionContext parseExpression(String src) {
+        input = expression(src)
+        expression
     }
     
     // workaround for strange compile error
