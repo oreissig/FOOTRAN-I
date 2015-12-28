@@ -13,7 +13,7 @@ import com.github.oreissig.footran1.checks.TypeCheck.TypeCheckException
 @Unroll
 class TypeCheckSpec extends AbstractFootranSpec {
     
-    TypeCheck types = new TypeCheck()
+    final TypeCheck types = new TypeCheck()
     
     def 'empty program is okay'() {
         when:
