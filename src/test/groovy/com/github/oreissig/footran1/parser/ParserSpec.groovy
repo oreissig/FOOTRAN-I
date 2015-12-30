@@ -57,7 +57,7 @@ C     FOO
         noParseError()
         def af = statement.arithmeticFormula()
         af != null
-        def lhs = [af.VAR_ID(), af.FUNC_CANDIDATE(), af.subscript()].find()
+        def lhs = [af.variable(), af.subscript()].find()
         lhs.text == var
         af.expression().text == expr
         

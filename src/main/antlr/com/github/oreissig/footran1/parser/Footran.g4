@@ -64,7 +64,7 @@ statement : arithmeticFormula
           ;
 
 // http://www.fortran.com/FortranForTheIBM704.pdf#18
-arithmeticFormula : (VAR_ID | FUNC_CANDIDATE | subscript) '=' expression;
+arithmeticFormula : (variable | subscript) '=' expression;
 
 
 // http://www.fortran.com/FortranForTheIBM704.pdf#19

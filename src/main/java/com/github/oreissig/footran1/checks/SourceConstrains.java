@@ -38,9 +38,10 @@ public class SourceConstrains extends FootranBaseListener {
     
     @Override
     public void enterArithmeticFormula(ArithmeticFormulaContext ctx) {
-        String name = ctx.VAR_ID() != null ? ctx.VAR_ID().getText()
-                                           : ctx.FUNC_CANDIDATE().getText();
-        checkVariable(name, ctx);
+        if (ctx.variable() != null)
+            checkVariable(ctx.variable());
+        else
+            checkVariable(ctx.subscript());
     }
     
     @Override

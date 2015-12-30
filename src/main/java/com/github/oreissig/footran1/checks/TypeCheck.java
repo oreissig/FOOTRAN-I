@@ -37,7 +37,10 @@ public class TypeCheck extends FootranBaseListener {
     private final Map<ParserRuleContext, Type> types = new HashMap<>();
     
     public Type getType(ParserRuleContext ctx) {
-        return types.get(ctx);
+        if (ctx == null || !types.containsKey(ctx))
+            return null;
+        else
+            return types.get(ctx);
     }
     
     @Override
@@ -64,26 +67,27 @@ public class TypeCheck extends FootranBaseListener {
     @Override
     public void exitArithmeticFormula(ArithmeticFormulaContext ctx) {
         // expression() type is irrelevant, it will automatically be casted
-        String name = ctx.VAR_ID() != null ? ctx.VAR_ID().getText()
-                                           : ctx.FUNC_CANDIDATE().getText();
-        types.put(ctx, getVariableType(name, ctx));
+        Type assigned = getType(ctx.variable());
+        if (assigned == null)
+            assigned = getType(ctx.subscript());
+        types.put(ctx, assigned);
     }
     
     @Override
     public void exitAssignedGoto(AssignedGotoContext ctx) {
-        if (getVariableType(ctx.variable()) != Type.FIXED)
+        if (getType(ctx.variable()) != Type.FIXED)
             throw new TypeCheckException("Assigned GOTO needs a fixed point variable", ctx);
     }
     
     @Override
     public void exitAssign(AssignContext ctx) {
-        if (getVariableType(ctx.variable()) != Type.FIXED)
+        if (getType(ctx.variable()) != Type.FIXED)
             throw new TypeCheckException("ASSIGN needs a fixed point variable", ctx);
     }
     
     @Override
     public void exitComputedGoto(ComputedGotoContext ctx) {
-        if (getVariableType(ctx.variable()) != Type.FIXED)
+        if (getType(ctx.variable()) != Type.FIXED)
             throw new TypeCheckException("Computed GOTO needs a fixed point variable", ctx);
     }
     
@@ -150,10 +154,10 @@ public class TypeCheck extends FootranBaseListener {
     
     private void checkDrum(DrumSpecContext drum, DrumSpecContext word) {
         VariableContext drumVar = drum.variable();
-        if (drumVar != null && types.get(drumVar) != Type.FIXED)
+        if (drumVar != null && getType(drumVar) != Type.FIXED)
             throw new TypeCheckException("drum can only be specified by fixed point variable", drumVar);
         VariableContext wordVar = word.variable();
-        if (wordVar != null && types.get(word) != Type.FIXED)
+        if (wordVar != null && getType(word) != Type.FIXED)
             throw new TypeCheckException("word can only be specified by fixed point variable", wordVar);
     }
     
