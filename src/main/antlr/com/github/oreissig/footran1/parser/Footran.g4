@@ -53,7 +53,10 @@ statement : arithmeticFormula
           | continueStmt
           | pause
           | stop
-          // TODO I/O
+          // I/O
+          | readDrum
+          | writeDrum
+          // TODO more I/O
           // specifications
           | dimension
           | equivalence
@@ -101,8 +104,13 @@ pause        : 'PAUSE' consoleOutput=ufixedConst?;
 stop         : 'STOP'  consoleOutput=ufixedConst?;
 
 
-// TODO I/O rules
+// I/O rules
 // http://www.fortran.com/FortranForTheIBM704.pdf#26
+// TODO more
+// http://www.fortran.com/FortranForTheIBM704.pdf#34
+readDrum  : 'READ'  'DRUM' drum=drumSpec ',' word=drumSpec (',' variable)+;
+writeDrum : 'WRITE' 'DRUM' drum=drumSpec ',' word=drumSpec (',' variable)+;
+drumSpec  : variable|ufixedConst;
 
 
 // http://www.fortran.com/FortranForTheIBM704.pdf#37

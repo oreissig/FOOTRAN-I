@@ -11,11 +11,13 @@ import com.github.oreissig.footran1.parser.FootranParser.ArithmeticFormulaContex
 import com.github.oreissig.footran1.parser.FootranParser.AssignContext;
 import com.github.oreissig.footran1.parser.FootranParser.AssignedGotoContext;
 import com.github.oreissig.footran1.parser.FootranParser.ComputedGotoContext;
+import com.github.oreissig.footran1.parser.FootranParser.DrumSpecContext;
 import com.github.oreissig.footran1.parser.FootranParser.FunctionCallContext;
 import com.github.oreissig.footran1.parser.FootranParser.IfSenseLightContext;
 import com.github.oreissig.footran1.parser.FootranParser.IfSenseSwitchContext;
 import com.github.oreissig.footran1.parser.FootranParser.LoopBoundaryContext;
 import com.github.oreissig.footran1.parser.FootranParser.PauseContext;
+import com.github.oreissig.footran1.parser.FootranParser.ReadDrumContext;
 import com.github.oreissig.footran1.parser.FootranParser.SenseLightContext;
 import com.github.oreissig.footran1.parser.FootranParser.StatementContext;
 import com.github.oreissig.footran1.parser.FootranParser.StopContext;
@@ -23,6 +25,7 @@ import com.github.oreissig.footran1.parser.FootranParser.SubscriptContext;
 import com.github.oreissig.footran1.parser.FootranParser.UfixedConstContext;
 import com.github.oreissig.footran1.parser.FootranParser.UnaryExpressionContext;
 import com.github.oreissig.footran1.parser.FootranParser.VariableContext;
+import com.github.oreissig.footran1.parser.FootranParser.WriteDrumContext;
 
 public class SourceConstrains extends FootranBaseListener {
     
@@ -111,6 +114,29 @@ public class SourceConstrains extends FootranBaseListener {
     @Override
     public void enterStatement(StatementContext ctx) {
         checkOneChild(ctx);
+    }
+    
+    @Override
+    public void enterReadDrum(ReadDrumContext ctx) {
+        checkDrum(ctx.drum, ctx.word);
+    }
+    
+    @Override
+    public void enterWriteDrum(WriteDrumContext ctx) {
+        checkDrum(ctx.drum, ctx.word);
+    }
+    
+    private static void checkDrum(DrumSpecContext drum, DrumSpecContext word) {
+        if (drum.ufixedConst() != null) {
+            int drumNo = Integer.parseInt(drum.ufixedConst().getText());
+            if (drumNo < 1 || drumNo > 8)
+                throw new SourceConstrainViolation("invalid drum specified", drum);
+        }
+        if (word.ufixedConst() != null) {
+            int wordNo = Integer.parseInt(word.ufixedConst().getText());
+            if (wordNo > 2047)
+                throw new SourceConstrainViolation("invalid start word specified", word);
+        }
     }
     
     private static void checkVariable(ParserRuleContext ctx) {

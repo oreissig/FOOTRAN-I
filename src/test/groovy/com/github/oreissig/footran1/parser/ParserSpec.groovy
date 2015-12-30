@@ -543,4 +543,38 @@ C     FOO
         est[1].ufixedConst()*.text == ['11']
         est[2].ufixedConst()*.text == ['1','7','1','1']
     }
+    
+    def 'READ DRUM can be parsed'(drum,start,list) {
+        when:
+        input = card("READ DRUM $drum, $start, ${list.join(',')}")
+        
+        then:
+        noParseError()
+        def read = statement.readDrum()
+        read.drum.text == drum
+        read.word.text == start
+        read.variable()*.text == list
+        
+        where:
+        drum | start  | list
+        '2'  | '1000' | ['A', 'B', 'C', 'D']
+        'I'  | 'J'    | ['A', 'B', 'C', 'D']
+    }
+    
+    def 'WRITE DRUM can be parsed'(drum,start,list) {
+        when:
+        input = card("WRITE DRUM $drum, $start, ${list.join(',')}")
+        
+        then:
+        noParseError()
+        def write = statement.writeDrum()
+        write.drum.text == drum
+        write.word.text == start
+        write.variable()*.text == list
+        
+        where:
+        drum | start  | list
+        '2'  | '1000' | ['A', 'B', 'C', 'D']
+        'I'  | 'J'    | ['A', 'B', 'C', 'D']
+    }
 }

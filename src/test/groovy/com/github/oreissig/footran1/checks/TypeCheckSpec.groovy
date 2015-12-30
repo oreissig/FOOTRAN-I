@@ -194,6 +194,10 @@ class TypeCheckSpec extends AbstractFootranSpec {
         'assigned goto' | 'GO TO A, (1,2,3)'
         'assign'        | 'ASSIGN 12 TO A'
         'computed goto' | 'GO TO (1,2,3), A'
+        'read drum'     | 'READ DRUM A,2,C'
+        'read drum'     | 'READ DRUM 1,B,C'
+        'write drum'    | 'WRITE DRUM A,2,C'
+        'write drum'    | 'WRITE DRUM 1,C,C'
     }
     
     private void typeCheck(src) {

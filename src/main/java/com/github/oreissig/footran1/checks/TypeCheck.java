@@ -15,11 +15,13 @@ import com.github.oreissig.footran1.parser.FootranParser.AssignContext;
 import com.github.oreissig.footran1.parser.FootranParser.AssignedGotoContext;
 import com.github.oreissig.footran1.parser.FootranParser.ComputedGotoContext;
 import com.github.oreissig.footran1.parser.FootranParser.DoLoopContext;
+import com.github.oreissig.footran1.parser.FootranParser.DrumSpecContext;
 import com.github.oreissig.footran1.parser.FootranParser.ExpressionContext;
 import com.github.oreissig.footran1.parser.FootranParser.FunctionCallContext;
 import com.github.oreissig.footran1.parser.FootranParser.LoopBoundaryContext;
 import com.github.oreissig.footran1.parser.FootranParser.PowerContext;
 import com.github.oreissig.footran1.parser.FootranParser.ProductContext;
+import com.github.oreissig.footran1.parser.FootranParser.ReadDrumContext;
 import com.github.oreissig.footran1.parser.FootranParser.StatementContext;
 import com.github.oreissig.footran1.parser.FootranParser.SubscriptContext;
 import com.github.oreissig.footran1.parser.FootranParser.SubscriptExpressionContext;
@@ -28,6 +30,7 @@ import com.github.oreissig.footran1.parser.FootranParser.UfixedConstContext;
 import com.github.oreissig.footran1.parser.FootranParser.UfloatConstContext;
 import com.github.oreissig.footran1.parser.FootranParser.UnaryExpressionContext;
 import com.github.oreissig.footran1.parser.FootranParser.VariableContext;
+import com.github.oreissig.footran1.parser.FootranParser.WriteDrumContext;
 
 public class TypeCheck extends FootranBaseListener {
     
@@ -133,6 +136,25 @@ public class TypeCheck extends FootranBaseListener {
     @Override
     public void exitPower(PowerContext ctx) {
         types.put(ctx, getAllChildrenSameType(ctx));
+    }
+    
+    @Override
+    public void exitReadDrum(ReadDrumContext ctx) {
+        checkDrum(ctx.drum, ctx.word);
+    }
+    
+    @Override
+    public void exitWriteDrum(WriteDrumContext ctx) {
+        checkDrum(ctx.drum, ctx.word);
+    }
+    
+    private void checkDrum(DrumSpecContext drum, DrumSpecContext word) {
+        VariableContext drumVar = drum.variable();
+        if (drumVar != null && types.get(drumVar) != Type.FIXED)
+            throw new TypeCheckException("drum can only be specified by fixed point variable", drumVar);
+        VariableContext wordVar = word.variable();
+        if (wordVar != null && types.get(word) != Type.FIXED)
+            throw new TypeCheckException("word can only be specified by fixed point variable", wordVar);
     }
     
     @Override
