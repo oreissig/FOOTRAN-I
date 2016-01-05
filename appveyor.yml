@@ -7,8 +7,8 @@ install:
   - SET PATH=%JAVA_HOME%\bin;%PATH%
   - gradlew.bat -v
 build_script:
-  - gradlew.bat -u -s assemble
+  - gradlew.bat -u -s --no-daemon assemble
 test_script:
-  - gradlew.bat -u -s check
+  - gradlew.bat -u -s --no-daemon check
 cache:
   - C:\Users\appveyor\.gradle
