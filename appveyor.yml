@@ -10,5 +10,5 @@ build_script:
   - gradlew.bat -u -s assemble
 test_script:
   - gradlew.bat -u -s check
-+cache:
+cache:
   - C:\Users\appveyor\.gradle
