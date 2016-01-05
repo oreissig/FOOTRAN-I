@@ -2,6 +2,7 @@ FOOTRAN I
 =========
 
 [![Build Status](https://travis-ci.org/oreissig/FOOTRAN-I.svg)](https://travis-ci.org/oreissig/FOOTRAN-I)
+[![Build status](https://ci.appveyor.com/api/projects/status/iln33r0ttco8a7d4?svg=true)](https://ci.appveyor.com/project/oreissig/footran-i)
 [![Dependency Status](https://www.versioneye.com/user/projects/564656d6b5b03d0022000862/badge.svg?style=flat)](https://www.versioneye.com/user/projects/564656d6b5b03d0022000862)
 
 A modern implementation of a compiler for the very first version of FORTRAN based on [IBM's official Reference Manual from 1956](http://www.fortran.com/FortranForTheIBM704.pdf).
