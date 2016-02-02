@@ -239,7 +239,7 @@ C     FOO
         
         then:
         SyntaxError e = thrown()
-        e.msg == "no viable alternative at input '-'"
+        e.msg.startsWith("extraneous input '-'")
     }
     
     def 'additive operations are parsed correctly (#src)'(src,op,summands) {
