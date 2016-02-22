@@ -20,7 +20,7 @@ dependencies {
     compile 'org.antlr:antlr4-runtime:4.5.2-1'
     compile 'org.slf4j:slf4j-api:1.7.16'
     
-    testCompile 'org.codehaus.groovy:groovy-all:2.4.5:indy'
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.6:indy'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
     // cglib and objenesis needed for advanced mocking
     testRuntime 'cglib:cglib:3.2.0'
