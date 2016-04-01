@@ -16,12 +16,12 @@ repositories {
 }
 
 dependencies {
-    antlr   'org.antlr:antlr4:4.5.2-1'
-    compile 'org.antlr:antlr4-runtime:4.5.2-1'
-    compile 'org.slf4j:slf4j-api:1.7.18'
+    antlr   'org.antlr:antlr4:4.5.3'
+    compile 'org.antlr:antlr4-runtime:4.5.3'
+    compile 'org.slf4j:slf4j-api:1.7.20'
     
     testCompile 'org.codehaus.groovy:groovy-all:2.4.6:indy'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
     // some actual log output
-    testRuntime 'org.slf4j:slf4j-simple:1.7.18'
+    testRuntime 'org.slf4j:slf4j-simple:1.7.20'
 }
